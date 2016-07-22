@@ -58,7 +58,7 @@ function checkUserMobile(param, fn) {
 	};
 	userModel.lookup(query, function(err, rows)) {
 		if (err) {
-			var msg = err.message || err;
+			var msg = err.msg || err;
 			console.error('check user mobile failed' + msg);
 			fn(err);
 		} else {
@@ -69,7 +69,7 @@ function checkUserMobile(param, fn) {
 				console.error(msg);
 				fn({
 					code: errorCode.USER_NOT_EXIST,
-					message: msg
+					msg: msg
 				});
 			}
 
@@ -95,9 +95,11 @@ function userLogin(param, fn) {
 		select: select,
 		match: match
 	};
+
+
 	userModel.lookup(query, function(err, rows) {
 		if (err) {
-			var msg = err.message || err;
+			var msg = err.msg || err;
 			connsole.error(' fail to login ' + msg),
 			fn(err);
 		} else {
@@ -107,7 +109,7 @@ function userLogin(param, fn) {
 				var msg = 'password error';
 				fn({
 					code: errorCode.PASSWORD_ERROR,
-					message: msg
+					msg: msg
 				});
 			}
 		}
@@ -120,7 +122,7 @@ function updateUserState(param, fn) {
 
 	var query = {
 		update: {
-			state: 1
+			loginState: 1
 		},
 		match: {
 			id: id
@@ -139,7 +141,7 @@ function updateUserState(param, fn) {
 
 }
 
-function responseData(data) {
+function packageResponseData(data) {
 	if (!data) {
 		return {};
 	} else {
@@ -158,7 +160,7 @@ function processRequest(param, fn) {
 		console.error(moduleName + msg);
 		fn({
 			code: errorCode.PARAM_INVALID,
-			message: msg
+			msg: msg
 		});
 	}
 	//encrpto the passpord
@@ -169,22 +171,22 @@ function processRequest(param, fn) {
 	debug(moduleName + 'debug the login mobile' + mobile);
 
 	async.auto({
-		func1: fucntion(callback, results) {
+		func1: fucntion(next, results) {
 			checkUserMobile(param, function(err, rows) {
-				callback(err, rows);
+				next(err, rows);
 			});
 		},
 
 		func2: ['func1',
-			function(callback, results) {
+			function(next, results) {
 				userLogin(param, function(err, rows) {
-					callback(err, rows);
+					next(err, rows);
 				});
 			}
 		],
 
 		func3: ['func2',
-			function(callback, results) {
+			function(next, results) {
 				var userId = results.func2.id;
 				updateUserState(userId, function(err, rows) {
 					if (err) {
@@ -193,7 +195,7 @@ function processRequest(param, fn) {
 						fn(err);
 					} else {
 						var data = results.func2;
-						var resData = responseData(data);
+						var resData = packageResponseData(data);
 						fn(null, resData);
 					}
 				});

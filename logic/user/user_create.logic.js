@@ -162,13 +162,13 @@ function processRequest(param, fn) {
 	debug('Try to create the user:' + userId);
 
 	async.series([
-			function(callback) {
+			function(next) {
 				//1. check whether user is duplicated!
-				checkUserName(param, callback);
+				checkUserName(param, next);
 			},
-			function(callback) {
+			function(next) {
 				//2. create the new user!
-				createUser(param, callback);
+				createUser(param, next);
 			}
 		],
 		function(err,result) {
