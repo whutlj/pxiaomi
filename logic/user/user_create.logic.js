@@ -29,11 +29,11 @@ var dataHelper = require('../../common/dataHelper');
 var refModel = {
 	userName: {
 		data: '',
-		rangeCheck: null,
+		rangeCheck: null
 	},
 	password: {
 		data: '',
-		rangeCheck: null,
+		rangeCheck: null
 	},
 	validatePas: {
 		data: '',
@@ -44,7 +44,7 @@ var refModel = {
 		rangeCheck: function(data) {
 			return is.inArray(data, [0, 1, 2]);
 		}
-	}
+	},
 	type: {
 		data: 0,
 		rangeCheck: function(data) {
@@ -73,22 +73,22 @@ function packageResponseData(inputData) {
 	}
 
 	var resData = {
-		userId: inputData,
+		userId: inputData
 	};
 	return resData;
 }
 
 function checkUserName(param, fn) {
 	var select = {
-		name: 'userName',
+		name: 'userName'
 	};
 	var match = {
-		name: param.userName || '',
+		name: param.userName || ''
 	};
 
 	var query = {
 		select: select,
-		match: match,
+		match: match
 	};
 
 	userModel.lookup(query, function(err, rows) {
@@ -106,7 +106,7 @@ function checkUserName(param, fn) {
 			} else {
 				fn(null, rows);
 			}
-		},
+		}
 	});
 }
 
@@ -114,13 +114,13 @@ function createUser(param, fn) {
 	var expect = logic_helper.createData({
 		debug: debug,
 		inputData: param,
-		refModel: refModel,
+		refModel: refModel
 	});
 
 
 	//create the fileds connection with database
 	var values = {};
-	values.name = expect.userName；
+	values.name = expect.userName;
 	values.password = expect.password;
 	values.gender = expect.gender;
 	values.type = expect.type;
@@ -130,7 +130,7 @@ function createUser(param, fn) {
 
 	var query = {
 		fields: values,
-		values: values,
+		values: values
 	};
 	userModel.create(query, function(err, rows) {
 		if (err) {
@@ -194,7 +194,7 @@ router.post(URLPATH, function(req, res, next) {
 		moduleName: moduleName,
 		processRequest: processRequest,
 		debug: debug,
-		param: param,
+		param: param
 	});
 });
 
@@ -209,7 +209,7 @@ function getCallback(req, res, next) {
 		moduleName: moduleName,
 		processRequest: processRequest,
 		debug: debug,
-		param: param,
+		param: param
 	});
 }
 
