@@ -145,3 +145,4 @@ module.exports.createGroupName = createGroupName;
 module.exports.createId = createId;
 module.exports.createSMSCode = createSMSCode;
 module.exports.createParentPath = createParentPath;
+module.exports.encrptPassword = encrptPassword;

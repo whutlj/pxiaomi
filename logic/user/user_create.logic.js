@@ -114,7 +114,7 @@ function checkUserName(param, fn) {
 function validatePassword(param,fn){
 	var password = param.password;
 	var validatePas = param.validatePas;
-	if(password === validatepas){
+	if(password === validatePas){
 		var resData = {};
 		fn(null,{});
 	}else{

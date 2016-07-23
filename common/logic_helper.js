@@ -165,5 +165,6 @@ function parseEditData(options){
 
  module.exports.validate = validate;
  module.exports.responseHttp = responseHttp;
- module.exports.createData = createData;
+ //module.exports.createData = createData;
+ 
  module.exports.parseEditData = parseEditData;
