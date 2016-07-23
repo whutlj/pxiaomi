@@ -110,7 +110,22 @@ function checkUserName(param, fn) {
 	});
 }
 
+
+function validatePassword(param,fn){
+	var password = param.password;
+	var validatePas = param.validatePas;
+	if(password === validatepas){
+		var resData = {};
+		fn(null,{});
+	}else{
+		var msg = ' Password is not consistent ';
+		fn({code : errorCode.PASSWORD_NOT_CONSTANTS,msg : msg});
+	}
+}
+
+
 function createUser(param, fn) {
+	/*
 	var expect = logic_helper.createData({
 		debug: debug,
 		inputData: param,
@@ -126,7 +141,17 @@ function createUser(param, fn) {
 	values.type = expect.type;
 
 	//create id by crpyto module
-	values.id = dataHelper.encrptPassword(param.userId);
+	values.id = dataHelper.createId(values.name);
+   */
+
+   var userName = param.userName;
+   var password = dataHelper.encrptPassword(param.password);
+   var userId = param.userId;
+   var values = {
+   		id : userId,
+   		password : password,
+   		name : userName
+   };
 
 	var query = {
 		fields: values,
@@ -155,7 +180,6 @@ function processRequest(param, fn) {
 	}
 	var userName = param.userName || param.name;
 	var userId = dataHelper.createId(userName);
-
 	param.userId = userId;
 
 
@@ -165,6 +189,8 @@ function processRequest(param, fn) {
 			function(next) {
 				//1. check whether user is duplicated!
 				checkUserName(param, next);
+			},function(next){
+				validatePassword(param,next);
 			},
 			function(next) {
 				//2. create the new user!

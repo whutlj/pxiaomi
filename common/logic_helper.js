@@ -101,6 +101,7 @@ function responseHttp (options) {
  	
  }
 
+/*
  function createData(options){
  	var debug = options.debug || LOGICDEBUG;
  	var inputData = options.inputData;
@@ -133,6 +134,7 @@ function responseHttp (options) {
  	return data;
  }
 
+*/
 function parseEditData(options){
 	var debug = options.debug || LOGICDEBUG;
  	var inputData = options.inputData;
