@@ -7,8 +7,8 @@
  */
 'use strict';
 var moment = require('moment');
-var db = require('../db');
-var errorCode = require('../../common/errorCode');
+var db = require('../common/db');
+var errorCode = require('../common/errorCode');
 var TIMEOUT = 10000; //10s
 
 var DBModel = module.exports = function(options) {

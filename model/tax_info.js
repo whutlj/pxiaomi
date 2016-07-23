@@ -1,6 +1,6 @@
 'use strict';
-var model_name = 'user_info.model';
-var table_name = 'tb_user_info';
+var model_name = 'user_tax.model';
+var table_name = 'tb_tax_info';
 
 var debug = require('debug')(model_name);
 var DBModel = require('./DBModel');
@@ -11,17 +11,13 @@ var DBModel = require('./DBModel');
 // reference model
 var refModel = {
     id : 'id',
-    name : 'name',
-    password : 'password',
-    portrait : 'portrait',
-    age : 20,
-    gender : 0, //0-male ,1 -female
-    type : 0, //0-user 1-admin
+    userId : 'userId',
+    bankName : 'bankName',
+    accountNo : 'accountNo',
+    title : 'pxiaomi',
+    taxNo : 'pxiaomi', //0-male ,1 -female
+    address : 'address', //0-user 1-admin
     mobile :'13419503630',
-    start : '',//the comment
-    smscode : 'smscode',
-    loginTime : new Date(),
-    loginState : 0,//0-login 1-logout
     createTime : new Date(),
     updateTime : new Date(),
     state : 0 //0-valid 1-iivalid 2-deleted

@@ -32,7 +32,7 @@ CREATE TABLE `tb_user_info` (
   `name` VARCHAR(45) NOT NULL COMMENT '用户名',
   `password` VARCHAR(45) NOT NULL COMMENT '用户密码',
   `portrait` VARCHAR(200) DEFAULT NULL COMMENT '用户头像',
-  `age` VARCHAR(11) DEFAULT NULL COMMENT '用户姓名',
+  `age` int(11) DEFAULT NULL COMMENT '用户姓名',
   `gender` int(11) DEFAULT 0 COMMENT '性别,1男,2女,0未知',
   `mobile` varchar(20) DEFAULT NULL COMMENT '手机号',
   `type` int(11) DEFAULT 0 COMMENT '用户类型, 0-普通,1-管理员',
@@ -100,7 +100,6 @@ SHOW WARNINGS;
 DROP TABLE IF EXISTS `tb_tax_info`;
 CREATE TABLE `tb_tax_info` (
   `id` VARCHAR(45) NOT NULL COMMENT '税务ID',
-  `businessId` VARCHAR(45) NOT NULL COMMENT '商户ID',
   `userId` VARCHAR(45) NOT NULL COMMENT '用户ID',
   `bankDeposit` VARCHAR(45) NOT NULL COMMENT '开户行名称',
   `accountNo` VARCHAR(45) NOT NULL COMMENT '银行账户',
@@ -112,7 +111,6 @@ CREATE TABLE `tb_tax_info` (
   `updateTime` DATETIME NOT NULL DEFAULT now() COMMENT 'update日期', 
   `state` int(11) NOT NULL DEFAULT 0 COMMENT '记录状态 0:有效 1:非法 2:删除',
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_tax_business` FOREIGN KEY(`businessId`) REFERENCES `tb_business_info`(`id`),
   CONSTRAINT `fk_tax_user` FOREIGN KEY(`userId`) REFERENCES `tb_user_info`(`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='税务信息表';
 

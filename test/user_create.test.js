@@ -6,6 +6,7 @@
  *  
  */
 'use strict';
+
 require('should');
 var async = require('async');
 var db = require('../db');

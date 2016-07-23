@@ -84,7 +84,7 @@ function responseHttp (options) {
 	 			json.result = {};
 	 		}else {
 	 			debug(moduleName + ' data process success: %j', result);
-	 			json.code = 0;
+	 			json.status = 0;
 	 			// json.message = 'pxiaomi@dmtec.cn';
 	 			json.result = result || {}; //accept the empty result
 	 		}
@@ -93,7 +93,7 @@ function responseHttp (options) {
 	 	});
  	}catch(e){
  		console.error(moduleName +", responseHttp:" +e);	 			
-	 	json.code = 1; //0-success, 1-fail, 2-timeout, 3-need login
+	 	json.status = 1; //0-success, 1-fail, 2-timeout, 3-need login
 	 	// json.message = e.toString();
 	 	json.result = {};
 		res.json(json);

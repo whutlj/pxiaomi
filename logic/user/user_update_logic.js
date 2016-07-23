@@ -146,7 +146,7 @@ router.post(URLPATH, function(req, res, next) {
 		moduleName: moduleName,
 		processRequest: processRequest,
 		debug: debug,
-		param: param,
+		param: param
 	});
 });
 

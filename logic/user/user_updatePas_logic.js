@@ -181,3 +181,16 @@ function processRequest(param, fn) {
 		}
 	);
 }
+
+router.post(URLPATH,function(req,res,next){
+	var param = req.body;
+	logicHelper.responseHttp({
+		res: res,
+		req: req,
+		next: next,
+		moduleName: moduleName,
+		processRequest: processRequest,
+		debug: debug,
+		param: param
+	});
+});

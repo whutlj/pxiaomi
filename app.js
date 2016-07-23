@@ -14,8 +14,8 @@ var port = (process.env.PORT_ENV && parseInt(process.env.PORT_ENV, 10)) || 6188;
 
 
 // Middlewares
-var constantHelper = require('../common/constants');
-var dataHelper = require('../common/dataHelper');
+var constantHelper = require('./common/constants');
+var dataHelper = require('./common/dataHelper');
 
 /// cookie
 var cookieParser = require('cookie-parser');
@@ -51,6 +51,7 @@ app.use(bodyParser.urlencoded());
 var morgan = require('morgan');
 app.use(morgan('combined'));
 
+/*
 //multer upload
 var multer = require('multer');
 app.use(multer({
@@ -110,6 +111,7 @@ app.use(multer({
   }
 }));
 
+
 // Login logic
 //var login = require('./logic/login');
 //app.use('/api/v1/logic/system', login.router);
@@ -122,7 +124,7 @@ app.use(acl.router);
 
 
 ///////////////////////////////////////////////////////
-
+*/
 
 // Mount logic API ////////////////////////////////////
 //user interfaces
