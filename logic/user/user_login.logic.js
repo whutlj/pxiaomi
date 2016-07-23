@@ -56,7 +56,7 @@ function checkUserMobile(param, fn) {
 		select: select,
 		match: match
 	};
-	userModel.lookup(query, function(err, rows)) {
+	userModel.lookup(query, function(err, rows){
 		if (err) {
 			var msg = err.msg || err;
 			console.error('check user mobile failed' + msg);
@@ -75,7 +75,7 @@ function checkUserMobile(param, fn) {
 
 		}
 
-	}
+	});
 }
 
 
@@ -171,7 +171,7 @@ function processRequest(param, fn) {
 	debug(moduleName + 'debug the login mobile' + mobile);
 
 	async.auto({
-		func1: fucntion(next, results) {
+		func1: function(next, results) {
 			checkUserMobile(param, function(err, rows) {
 				next(err, rows);
 			});

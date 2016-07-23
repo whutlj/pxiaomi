@@ -75,8 +75,8 @@ function checkUserState(param, fn) {
 
 function selectUserInfo(param, fn) {
 	var select = {
-		name: 'name'
-		portrait: 'portrait'
+		name: 'name',
+		portrait: 'portrait',
 		gender: 0,
 		age: 0,
 		email: 'email',

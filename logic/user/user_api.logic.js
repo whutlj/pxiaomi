@@ -18,7 +18,7 @@ router.use(api_user_create.router);
 router.use(api_user_login.router);
 router.use(api_user_select.router);
 router.use(api_user_update.router);
-router.user(api_user_updatePas.router);
+router.use(api_user_updatePas.router);
 
 
 module.exports.router = router;

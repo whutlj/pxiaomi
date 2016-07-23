@@ -50,7 +50,7 @@ function queryPassword(param, fn) {
 		password: 'password'
 	};
 	var match = {
-		id: userId;
+		id: userId
 	};
 	var query = {
 		select: select,
@@ -176,7 +176,7 @@ function processRequest(param, fn) {
 			} else {
 				debug('success to udpate the password');
 				var resData = {};
-				fn(null, , resData);
+				fn(null, resData);
 			}
 		}
 	);
@@ -194,3 +194,6 @@ router.post(URLPATH,function(req,res,next){
 		param: param
 	});
 });
+
+
+module.exports.router = router;
