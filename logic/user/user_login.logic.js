@@ -1,6 +1,6 @@
 'use strict';
 
-
+//ok
 var moduleName = 'user_login.logic';
 var URLPATH = '/v1/user/login';
 
@@ -18,7 +18,7 @@ var logicHelper = require('../../common/logic_helper');
 
 
 
-var ref = {
+var refModel = {
 	mobile: {
 		data: 'mobile',
 		rangeCheck: null
@@ -44,6 +44,7 @@ function validate(data) {
 
 //check whether the user id not exist 
 function checkUserMobile(param, fn) {
+	//console.log(param);
 	var mobile = param.mobile;
 	var select = {
 		mobile: mobile
@@ -116,10 +117,9 @@ function userLogin(param, fn) {
 	});
 }
 
-//update state = 0 //login
-function updateUserState(param, fn) {
-	var id = param.id;
-
+function updateUserState(userId, fn) {
+	var id = userId;
+	//console.log(id);
 	var query = {
 		update: {
 			loginState: 1
@@ -145,9 +145,10 @@ function packageResponseData(data) {
 	if (!data) {
 		return {};
 	} else {
+		console.log(data);
 		var resData = {
 			userId: data.id,
-			portrait: data.portriat
+			portrait: data.portrait
 		};
 		return resData;
 	}
@@ -155,6 +156,7 @@ function packageResponseData(data) {
 }
 
 function processRequest(param, fn) {
+ 	console.log(param);
 	if (!validate(param)) {
 		var msg = 'invalid input data ';
 		console.error(moduleName + msg);
@@ -164,7 +166,9 @@ function processRequest(param, fn) {
 		});
 	}
 	//encrpto the passpord
-	param.passpord = dataHelper.encrptPassword(param.password);
+	param.password = dataHelper.encrptPassword(param.password);
+ 
+	console.log(param);
 
 	var mobile = param.mobile;
 
@@ -187,20 +191,27 @@ function processRequest(param, fn) {
 
 		func3: ['func2',
 			function(next, results) {
+				console.log(results);
 				var userId = results.func2.id;
+				//console.log(userId);
 				updateUserState(userId, function(err, rows) {
 					if (err) {
 						var msg = ' user login fail ' + err;
-						connsole.error(err);
+						console.error(err);
 						fn(err);
 					} else {
-						var data = results.func2;
-						var resData = packageResponseData(data);
-						fn(null, resData);
+						next(null, rows);
 					}
 				});
-			}
-		]
+			}]
+	},function(err, results){
+		if(err){
+			fn(err);
+		}else{
+             		var data = results.func2;
+			var resData = packageResponseData(data);
+			fn(null, resData);
+	 	}
 	});
 }
 

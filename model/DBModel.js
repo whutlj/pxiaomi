@@ -163,7 +163,7 @@ function lookup(query, fn) {
                 var date = moment(match[k]).format('YYYY-MM-DD HH:mm:ss');
                 ca.push('' + k + '=' + '\'' + date + '\'');
             } else {
-                ca.push('' + k + '=' + (typeof match[k] === 'string' ? '"' + match[k] + '"' : match[k]));
+                ca.push('' + k + '=' +match[k]);
             }
         });
         sqlstr += ca.join(' and ');

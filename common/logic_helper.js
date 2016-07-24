@@ -79,22 +79,22 @@ function responseHttp (options) {
 	 			var message = err.msg || err;
 	 			console.error(moduleName + ' data process failed: %j', message);
 	 			
-	 			json.status = code; //0-success, 1-fail, 2-timeout, 3-need login
-	 			// json.message = message;
+	 			json.status = code; 
+	 			json.message = message;
 	 			json.result = {};
 	 		}else {
 	 			debug(moduleName + ' data process success: %j', result);
 	 			json.status = 0;
-	 			// json.message = 'pxiaomi@dmtec.cn';
-	 			json.result = result || {}; //accept the empty result
+	 			json.message = 'pxiaomi@dmtec.cn';
+	 			json.result = result || {};
 	 		}
 
 	 		res.json(json);
 	 	});
  	}catch(e){
  		console.error(moduleName +", responseHttp:" +e);	 			
-	 	json.status = 1; //0-success, 1-fail, 2-timeout, 3-need login
-	 	// json.message = e.toString();
+	 	json.status = 1; 
+	 	json.message = e.toString();
 	 	json.result = {};
 		res.json(json);
  	}

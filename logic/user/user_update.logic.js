@@ -63,15 +63,16 @@ function validate(data) {
 }
 
 function updateUserInfo(param, fn) {
+console.log(param);
 	var update = {
 		name: param.userName,
 		portrait: param.portrait,
 		age: param.age,
-		gender: parm.gender,
+		gender: param.gender,
 		email: param.email,
 		updateTime : param.updateTime
 	};
-
+console.log(update);
 	var match ={
 		id: param.userId
 	};
@@ -98,6 +99,7 @@ function packageResponseData(data){
 }
 
 function processRequest(param, fn){
+console.log(param);
 	if(!validate(param)){
 		var msg = 'invalid input data';
 		console.error(moduleName + ' : '+msg);
@@ -109,6 +111,7 @@ function processRequest(param, fn){
 
    	param.updateTime = new Date();
    	updateUserInfo(param,function(err,rows){
+console.log(param);
    		if(err){
    			console.error('failed to update the user');
    			fn(err);
@@ -124,7 +127,7 @@ function processRequest(param, fn){
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
 
-	logic_helper.responseHttp({
+	logicHelper.responseHttp({
 		res: res,
 		req: req,
 		next: next,

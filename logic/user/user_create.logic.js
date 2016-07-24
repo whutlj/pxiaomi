@@ -1,10 +1,4 @@
-// user create api
-// copyright@dmtec.cn reserved, 2016
-/*
- * history:
- * 2016.07.08, created by Andy.zhou
- *
- */
+// ok
 
 'use strict';
 var moduleName = 'user_create.logic';
@@ -55,6 +49,7 @@ var refModel = {
 
 
 function validate(data) {
+   
 	if (!data) {
 		return false;
 	}
@@ -212,7 +207,6 @@ function processRequest(param, fn) {
 //post interface
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
-
 	logic_helper.responseHttp({
 		res: res,
 		req: req,
@@ -227,7 +221,6 @@ router.post(URLPATH, function(req, res, next) {
 //get interface for mocha testing
 function getCallback(req, res, next) {
 	var param = req.query;
-
 	logic_helper.responseHttp({
 		res: res,
 		req: req,

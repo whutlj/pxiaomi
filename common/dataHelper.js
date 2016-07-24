@@ -36,8 +36,8 @@ function createSha1Data(inputs) {
 // encrpt the password
 function encrptPassword(data) {
 	var hash = crypto.createHash('sha1');
-	hash.update(data);
 	hash.update(salt);
+        hash.update(data,'binary');
 	var sign = hash.digest('hex');
 	return sign;
 }

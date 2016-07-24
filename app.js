@@ -17,6 +17,7 @@ var port = (process.env.PORT_ENV && parseInt(process.env.PORT_ENV, 10)) || 6188;
 var constantHelper = require('./common/constants');
 var dataHelper = require('./common/dataHelper');
 
+/*
 /// cookie
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
@@ -41,17 +42,18 @@ app.use(session({
   cookie: {path:'/', secure:false, httpOnly:false, maxAge: 24*3600*1000,},
   
 }));
-
+*/
 /// body parser
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded());
 
+/*
 /// morgan log
 var morgan = require('morgan');
 app.use(morgan('combined'));
 
-/*
+
 //multer upload
 var multer = require('multer');
 app.use(multer({
