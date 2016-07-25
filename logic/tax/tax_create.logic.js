@@ -29,8 +29,8 @@ var refModel = {
 		data: 'taxNo',
 		rangeCheck: null
 	},
-	bankName: {
-		data: 'bankName',
+	bankDeposit: {
+		data: 'bankDeposit',
 		rangeCheck: null
 	},
 	accountNo: {
@@ -68,18 +68,19 @@ function createTax(param, fn) {
 		userId: param.userId,
 		title: param.title,
 		taxNo: param.taxNo,
-		bankName: param.bankName,
+		bankDeposit: param.bankDeposit,
 		accountNo: param.accountNo,
 		address: param.address,
 		mobile: param.mobile
 	};
-
+//console.log(values);
 
 	var query = {
-		fileds: values,
+		fields: values,
 		values: values
 	};
 
+	//console.log(query);
 	taxModel.create(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
@@ -97,6 +98,7 @@ function packageResponseData(data) {
 }
 
 function processRequest(param, fn) {
+	
 	if (!validate(param)) {
 		var msg = 'invalid input data';
 		console.error(moduleName + ' : ' + msg);
@@ -115,7 +117,7 @@ function processRequest(param, fn) {
 	createTax(param, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
-			console.error(' failed to create the tax ' = taxId);
+			console.error(' failed to create the tax ' + taxId);
 			fn(err);
 		} else {
 			var resData = packageResponseData(rows);

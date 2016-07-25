@@ -137,7 +137,7 @@ app.use(api_user.router);
 
 //tax interfaces
 var api_tax = require('./logic/tax/tax_api.logic');
-app.use(api_tax);
+app.use(api_tax.router);
 
 
 ///////////////////////////////////////////////

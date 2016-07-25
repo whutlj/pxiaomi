@@ -99,10 +99,10 @@ function validatePas(data, fn) {
 			}
 		}
 
-	}
 }
 
-function updatePassword(param, fn) {
+
+function updateUserPas(param, fn) {
 	var userId = param.userId;
 	var newPassword = param.newPassword;
 
@@ -116,7 +116,7 @@ function updatePassword(param, fn) {
 	var query = {
 		update: update,
 		match: match
-	}
+	};
 
 
 	debug(moduleName + 'try to update the password ' + userId);
@@ -133,7 +133,7 @@ function updatePassword(param, fn) {
 }
 
 
-function processRequest(param, fn) {
+function processRequest(param, fn){
 	if (!validate(param)) {
 		var msg = ' invalid input data';
 		console.error(moduleName + ' : ' + msg);
@@ -148,13 +148,13 @@ function processRequest(param, fn) {
 
 	async.waterfall([
 
-			function(next, result) {
+			function(next) {
 				queryPassword(param, function(err, rows) {
 					next(err, rows);
 				});
 			},
-			function(next, result) {
-//console.log(result);
+			function(result, next) {
+console.log(result);
 				var data = {};
 				data.oldPassword = result.password;
 				data.inputPassword = param.password;
@@ -163,8 +163,8 @@ function processRequest(param, fn) {
 					next(err, rows);
 				});
 			},
-			function(next, result) {
-				updatePassword(param, function(err, rows) {
+			function(result, next) {
+				updateUserPas(param, function(err, rows) {
 					next(err, rows);
 				});
 			}

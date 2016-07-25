@@ -64,6 +64,12 @@ function logoutUser(param,fn){
 }
 
 
+function packageResponseData(data){
+	var resData = {};
+	return resData;
+
+}
+
 function processRequest(param,fn){
 	if (!validate(param)) {
 		var msg = ' invalid input data ';
@@ -82,7 +88,8 @@ function processRequest(param,fn){
     		console.error('failed to update uer state '+ msg);
     		fn(err);
     	}else{
-    		fn(null,rows);
+		var resData = packageResponseData(rows);
+    		fn(null,resData);
     	}
     });
 }
@@ -108,8 +115,8 @@ router.get(URLPATH,function(req,res,next){
 		req: req,
 		next: next,
 		moduleName: moduleName,
-		processRequest: ,
-		debug: debug,processRequest
+		processRequest: processRequest,
+		debug: debug,
 		param: param
 	});
 });

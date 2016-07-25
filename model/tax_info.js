@@ -12,7 +12,7 @@ var DBModel = require('./DBModel');
 var refModel = {
     id : 'id',
     userId : 'userId',
-    bankName : 'bankName',
+    bankDeposit : 'bankdeposit',
     accountNo : 'accountNo',
     title : 'pxiaomi',
     taxNo : 'pxiaomi', 

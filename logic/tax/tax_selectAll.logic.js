@@ -1,7 +1,7 @@
 'use strict';
 
 
-var moduleName = 'tax_selectAll_logic';
+var moduleName = 'tax_selectAll.logic';
 var URLPATH = '/v1/tax/taxInfo';
 
 var express = require('express');
@@ -42,15 +42,15 @@ function selectAllTax(param,fn){
 		id : 'id',
 		title : 'title',
 		taxNo : 'taxNo',
-		bankName : 'bankName',
-		bankNo : 'bankNo',
+		bankDeposit : 'bankDeposit',
+		accountNo : 'accountNo',
 		address : 'address',
 		mobile : 'mobile'
 	};
  	
 	var match ={
 		userId : userId,
-		state : 1
+		state : 0
 	};
 
 	var query = {

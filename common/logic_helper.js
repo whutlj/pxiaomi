@@ -93,7 +93,7 @@ function responseHttp (options) {
 	 	});
  	}catch(e){
  		console.error(moduleName +", responseHttp:" +e);	 			
-	 	json.status = 1; 
+	 	json.status = 7; 
 	 	json.message = e.toString();
 	 	json.result = {};
 		res.json(json);

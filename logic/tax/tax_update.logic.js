@@ -30,8 +30,8 @@ var refModel = {
 		data: 'taxNo',
 		rangeCheck: null
 	},
-	bankName: {
-		data: 'bankName',
+	bankDeposit: {
+		data: 'bankDeposit',
 		rangeCheck: null
 	},
 	accountNo: {
@@ -43,7 +43,7 @@ var refModel = {
 		rangeCheck: null
 	},
 	mobile: {
-		data: '13419092394',
+		data: 'mobile',
 		rangeCheck: null
 	}
 };
@@ -73,6 +73,7 @@ function updateTax(param, fn) {
 		match: match,
 		update: update
 	};
+console.log(query);
 	taxModel.update(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;

@@ -89,14 +89,14 @@ function checkUserExist(param, fn) {
 	userModel.lookup(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
-			console.error('Failed to check the userName duplicated!');
+			console.error('Failed to check the mobile duplicated!');
 			fn(err);
 		} else {
 			if (rows.length) {
-				console.error('duplicated userName:' + param.userName);
+				console.error('duplicated mobile:' + param.userName);
 				fn({
 					code: errorCode.USER_INVALID,
-					msg: 'duplicated userName!'
+					msg: 'duplicated mobile!'
 				});
 			} else {
 				fn(null, rows);

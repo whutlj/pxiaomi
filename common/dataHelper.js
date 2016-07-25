@@ -150,6 +150,7 @@ function createParentPath(date) {
 */
 
 module.exports.createUserId = createUserId;
+module.exports.createTaxId = createTaxId;
 //module.exports.createUserTokenId = createUserTokenId;
 // module.exports.createOrderId = createOrderId;
 // module.exports.createOrderProcessId = createOrderProcessId;

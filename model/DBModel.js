@@ -228,6 +228,7 @@ function create(query, fn) {
     expect.createTime = refModel.createTime;
     expect.updateTime = refModel.updateTime;
 
+
     // 1.
     // Validate input
     // if failed return error
@@ -295,6 +296,8 @@ function create(query, fn) {
         sqlstr += va.join(',');
         sqlstr += ';';
 
+	//console.log(sqlstr);
+	
         debug(table_name + ' create sql: ' + sqlstr);
 
         // Use the connection

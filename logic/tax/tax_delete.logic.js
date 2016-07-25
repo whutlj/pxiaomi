@@ -44,7 +44,7 @@ function deleteTax(param, fn) {
 
 	var update = {
 		state: 2,
-		updateTime: new Date();
+		updateTime: new Date()
 	};
 
 	var query = {
@@ -80,10 +80,12 @@ function processRequest(param, fn) {
 	}
 
 	var taxId = param.taxId;
+	
+	//console.log(taxId);
 
 	debug(' try to delete the tax ' + taxId);
 
-	updateTax(param, function(err, rows) {
+	deleteTax(param, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
 			console.error(' failed to delete the tax ' + taxId);
