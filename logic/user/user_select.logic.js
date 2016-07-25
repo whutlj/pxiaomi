@@ -1,3 +1,4 @@
+//ok
 'use strict ';
 
 var moduleName = 'user_select.logic';

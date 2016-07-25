@@ -21,15 +21,15 @@ var errorCode = require('../../common/errorCode');
 var dataHelper = require('../../common/dataHelper');
 
 var refModel = {
+	mobile: {
+		data :'',
+		rangeCheck : null
+	},
 	userName: {
 		data: '',
 		rangeCheck: null
 	},
 	password: {
-		data: '',
-		rangeCheck: null
-	},
-	validatePas: {
 		data: '',
 		rangeCheck: null
 	},
@@ -73,12 +73,12 @@ function packageResponseData(inputData) {
 	return resData;
 }
 
-function checkUserName(param, fn) {
+function checkUserExist(param, fn) {
 	var select = {
-		name: 'userName'
+		mobile: 'mobile'
 	};
 	var match = {
-		name: param.userName || ''
+		mobile: param.mobile || ''
 	};
 
 	var query = {
@@ -106,18 +106,6 @@ function checkUserName(param, fn) {
 }
 
 
-function validatePassword(param,fn){
-	var password = param.password;
-	var validatePas = param.validatePas;
-	if(password === validatePas){
-		var resData = {};
-		fn(null,{});
-	}else{
-		var msg = ' Password is not consistent ';
-		fn({code : errorCode.PASSWORD_NOT_CONSTANTS,msg : msg});
-	}
-}
-
 
 function createUser(param, fn) {
 	/*
@@ -138,14 +126,15 @@ function createUser(param, fn) {
 	//create id by crpyto module
 	values.id = dataHelper.createId(values.name);
    */
-
+   var mobile = param.mobile;
    var userName = param.userName;
-   var password = dataHelper.encrptPassword(param.password);
+   var password = param.password;
    var userId = param.userId;
    var values = {
    		id : userId,
    		password : password,
-   		name : userName
+   		name : userName,
+   		mobile : mobile
    };
 
 	var query = {
@@ -174,7 +163,7 @@ function processRequest(param, fn) {
 		});
 	}
 	var userName = param.userName || param.name;
-	var userId = dataHelper.createId(userName);
+	var userId = dataHelper.createUserId(param);
 	param.userId = userId;
 
 
@@ -183,9 +172,7 @@ function processRequest(param, fn) {
 	async.series([
 			function(next) {
 				//1. check whether user is duplicated!
-				checkUserName(param, next);
-			},function(next){
-				validatePassword(param,next);
+				checkUserExist(param, next);
 			},
 			function(next) {
 				//2. create the new user!

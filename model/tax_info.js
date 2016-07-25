@@ -1,5 +1,5 @@
 'use strict';
-var model_name = 'user_tax.model';
+var model_name = 'tax_info.model';
 var table_name = 'tb_tax_info';
 
 var debug = require('debug')(model_name);
@@ -15,8 +15,8 @@ var refModel = {
     bankName : 'bankName',
     accountNo : 'accountNo',
     title : 'pxiaomi',
-    taxNo : 'pxiaomi', //0-male ,1 -female
-    address : 'address', //0-user 1-admin
+    taxNo : 'pxiaomi', 
+    address : 'address', 
     mobile :'13419503630',
     createTime : new Date(),
     updateTime : new Date(),

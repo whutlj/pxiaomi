@@ -28,10 +28,6 @@ var refModel = {
 	newPassword: {
 		data: 'newPassword',
 		rangeCheck: null
-	},
-	validatePas: {
-		data: 'validatePas',
-		rangeCheck: null	
 	}
 };
 
@@ -77,9 +73,8 @@ function queryPassword(param, fn) {
 
 function validatePas(data, fn) {
 	var oldPassword = data.oldPassword; //old password
-	var inputPassword = data.password; //input old password
+	var inputPassword = data.inputPassword; //input old password
 	var newPassword = data.newPassword;
-	var validatePassword = data.validatePas;
 	if (oldPassword !== inputPassword) {
 		var msg = 'updatePas input old password error';
 		console.error(msg);
@@ -96,15 +91,6 @@ function validatePas(data, fn) {
 				msg: msg
 			});
 		} else {
-			if(newPassword!==validatePassword){
-			var msg = 'the two password different';
-			console.error(msg);
-			fn({
-				code: errorCode.UPDATE_VALIDATE_ERROR,
-				msg: msg
-			});
-			
-			}else{
 				var rows = {
 				password : newPassword
 				};
@@ -122,7 +108,7 @@ function updatePassword(param, fn) {
 
 	var update = {
 		password: newPassword,
-		updateTime: param.updateTime
+		updateTime: new Date()
 	};
 	var match = {
 		id: userId
@@ -156,12 +142,7 @@ function processRequest(param, fn) {
 			msg: msg
 		});
 	}
-	
-	param.inputPassword = param.password;
-	//param.validatePas = dataHelper.encrptPassword(param.validatePas);
-	//param.inputPassword = dataHelper.encrptPassword(param.password);
-	//param.newPassword = dataHelper.encrptPassword(password.newPassword);
-	param.updateTime = new Date();
+
 
 	debug('try to update the user password' + param.userId);
 
@@ -173,12 +154,11 @@ function processRequest(param, fn) {
 				});
 			},
 			function(next, result) {
-console.log(result);
+//console.log(result);
 				var data = {};
 				data.oldPassword = result.password;
-				data.password = param.password;
+				data.inputPassword = param.password;
 				data.newPassword = param.newPassword;
-				data.validatePas = param.validatePas;
 				validatePas(data, function(err, rows) {
 					next(err, rows);
 				});
@@ -214,5 +194,17 @@ router.post(URLPATH,function(req,res,next){
 	});
 });
 
+router.get(URLPATH,function(req,res,next){
+	var param = req.query;
+	logicHelper.responseHttp({
+		res: res,
+		req: req,
+		next: next,
+		moduleName: moduleName,
+		processRequest: processRequest,
+		debug: debug,
+		param: param
+	});
+});
 
 module.exports.router = router;

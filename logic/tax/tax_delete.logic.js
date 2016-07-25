@@ -1,14 +1,13 @@
 'use strict';
 
 
-var moduleName = 'tax_create.logic';
-var URLPATH = '/v1/tax/addTax';
+var moduleName = 'tax_delete.logic';
+var URLPATH = '/v1/tax/deleteTax';
 
 
 var express = require('express');
 var router = express.Router();
 var debug = require('debug')(moduleName);
-
 
 var dataHelper = require('../../common/dataHelper');
 var logicHelper = require('../../common/logic_helper');
@@ -16,37 +15,13 @@ var errorCode = require('../../common/errorCode');
 
 var taxModel = require('../../model/tax_info');
 
+
 var refModel = {
-	userId: {
-		data: 'userId',
-		rangeCheck: null
-	},
-	title: {
-		data: 'title',
-		rangeCheck: null
-	},
-	taxNo: {
-		data: 'taxNo',
-		rangeCheck: null
-	},
-	bankName: {
-		data: 'bankName',
-		rangeCheck: null
-	},
-	accountNo: {
-		data: 'accountNo',
-		rangeCheck: null
-	},
-	address: {
-		data: 'address',
-		rangeCheck: null
-	},
-	mobile: {
-		data: '13419092394',
+	taxId: {
+		data: 'taxId',
 		rangeCheck: null
 	}
 };
-
 
 function validate(data) {
 	if (!data) {
@@ -60,36 +35,34 @@ function validate(data) {
 	});
 }
 
+function deleteTax(param, fn) {
+	var taxId = param.taxId;
 
-
-function createTax(param, fn) {
-	var values = {
-		id: param.id,
-		userId: param.userId,
-		title: param.title,
-		taxNo: param.taxNo,
-		bankName: param.bankName,
-		accountNo: param.accountNo,
-		address: param.address,
-		mobile: param.mobile
+	var match = {
+		id: taxId
 	};
 
+	var update = {
+		state: 2,
+		updateTime: new Date();
+	};
 
 	var query = {
-		fileds: values,
-		values: values
+		match: match,
+		update: update
 	};
-
-	taxModel.create(query, function(err, rows) {
-		if (err) {
+	taxModel.update(query,function(err,rows){
+		if(err){
 			var msg = err.msg || err;
-			console.error('failed to create tax ' + msg);
+			console.log(' failed to update the tax state ' + taxId);
 			fn(err);
-		} else {
-			fn(null, rows);
+		}else{
+			fn(null,rows);
 		}
 	});
 }
+
+
 
 function packageResponseData(data) {
 	var resData = {};
@@ -106,16 +79,14 @@ function processRequest(param, fn) {
 		});
 	}
 
-	var taxNo = param.taxNo;
-	var taxId = dataHelper.createTaxId(taxNo);
-	param.id = taxId;
+	var taxId = param.taxId;
 
-	debug(' try to create the tax ' + taxId);
+	debug(' try to delete the tax ' + taxId);
 
-	createTax(param, function(err, rows) {
+	updateTax(param, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
-			console.error(' failed to create the tax ' = taxId);
+			console.error(' failed to delete the tax ' + taxId);
 			fn(err);
 		} else {
 			var resData = packageResponseData(rows);
@@ -124,9 +95,9 @@ function processRequest(param, fn) {
 	});
 }
 
-//post interface
-router.post(URLPATH, function(req, res, next) {
-	var param = req.body;
+//get interface
+router.get(URLPATH, function(req, res, next) {
+	var param = req.query;
 	logicHelper.responseHttp({
 		res: res,
 		req: req,
@@ -138,9 +109,10 @@ router.post(URLPATH, function(req, res, next) {
 	});
 });
 
-//get interface for mocha testing
-router.get(URLPATH, function(req, res, next) {
-	var param = req.query;
+
+//post interface for mocha testing
+router.post(URLPATH, function(req, res, next) {
+	var param = req.body;
 	logicHelper.responseHttp({
 		res: res,
 		req: req,

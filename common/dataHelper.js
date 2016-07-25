@@ -34,21 +34,26 @@ function createSha1Data(inputs) {
 
 
 // encrpt the password
-function encrptPassword(data) {
-	var hash = crypto.createHash('sha1');
-	hash.update(salt);
-        hash.update(data,'binary');
-	var sign = hash.digest('hex');
-	return sign;
-}
+// function encrptPassword(data) {
+// 	var hash = crypto.createHash('sha1');
+// 	hash.update(salt);
+//         hash.update(data,'binary');
+// 	var sign = hash.digest('hex');
+// 	return sign;
+// }
 
 
 function createUserId(options) {
 	var userId = options.mobile || createId();
-
 	return userId;
 }
 
+
+function createTaxId(options){
+	var taxId = createId();
+	return taxId;
+}
+/*
 function createUserTokenId(options) {
 	var userId = options.userId;
 
@@ -100,6 +105,8 @@ function createGroupName(options) {
 	}
 	return description;
 }
+*/
+
 
 function createId(data) {
 	var createId = data || 'createId';
@@ -110,6 +117,9 @@ function createId(data) {
 
 	return id;
 }
+
+
+
 
 function createSMSCode() {
 	var buf = crypto.randomBytes(32);
@@ -123,6 +133,7 @@ function createSMSCode() {
 	return smscode;
 }
 
+/*
 function createParentPath(date) {
 	var d = new Date();
 	var parentpath = date.getFullYear() + "-";
@@ -136,13 +147,14 @@ function createParentPath(date) {
 	return parentpath;
 }
 
+*/
+
 module.exports.createUserId = createUserId;
-module.exports.createUserTokenId = createUserTokenId;
-module.exports.createOrderId = createOrderId;
-module.exports.createOrderProcessId = createOrderProcessId;
-module.exports.createGroupId = createGroupId;
-module.exports.createGroupName = createGroupName;
+//module.exports.createUserTokenId = createUserTokenId;
+// module.exports.createOrderId = createOrderId;
+// module.exports.createOrderProcessId = createOrderProcessId;
+// module.exports.createGroupId = createGroupId;
+// module.exports.createGroupName = createGroupName;
 module.exports.createId = createId;
 module.exports.createSMSCode = createSMSCode;
-module.exports.createParentPath = createParentPath;
-module.exports.encrptPassword = encrptPassword;
+// module.exports.createParentPath = createParentPath;

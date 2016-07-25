@@ -1,3 +1,4 @@
+//ok
 'use strict';
 
 var moduleName = 'user_update.logic';
@@ -70,7 +71,7 @@ function updateUserInfo(param, fn) {
 		age: param.age,
 		gender: param.gender,
 		email: param.email,
-		updateTime : param.updateTime
+		updateTime : new Date()
 	};
 //console.log(update);
 	var match ={
@@ -109,7 +110,6 @@ function processRequest(param, fn){
 	var userName = param.userName;
    	debug('try to update the user ' + moduleName);
 
-   	param.updateTime = new Date();
    	updateUserInfo(param,function(err,rows){
    		if(err){
    			console.error('failed to update the user');

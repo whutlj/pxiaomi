@@ -156,7 +156,7 @@ function packageResponseData(data) {
 }
 
 function processRequest(param, fn) {
- 	console.log(param);
+ 	//console.log(param);
 	if (!validate(param)) {
 		var msg = 'invalid input data ';
 		console.error(moduleName + msg);
@@ -165,10 +165,10 @@ function processRequest(param, fn) {
 			msg: msg
 		});
 	}
-	//encrpto the passpord
-	param.password = dataHelper.encrptPassword(param.password);
+	
+	
  
-	console.log(param);
+	//console.log(param);
 
 	var mobile = param.mobile;
 

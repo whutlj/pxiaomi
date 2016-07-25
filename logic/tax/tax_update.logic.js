@@ -1,8 +1,8 @@
 'use strict';
 
 
-var moduleName = 'tax_create.logic';
-var URLPATH = '/v1/tax/addTax';
+var moduleName = 'tax_update.logic';
+var URLPATH = '/v1/tax/updateTax';
 
 
 var express = require('express');
@@ -16,9 +16,10 @@ var errorCode = require('../../common/errorCode');
 
 var taxModel = require('../../model/tax_info');
 
+
 var refModel = {
-	userId: {
-		data: 'userId',
+	taxId: {
+		data: 'taxId',
 		rangeCheck: null
 	},
 	title: {
@@ -47,7 +48,6 @@ var refModel = {
 	}
 };
 
-
 function validate(data) {
 	if (!data) {
 		return false;
@@ -60,30 +60,23 @@ function validate(data) {
 	});
 }
 
-
-
-function createTax(param, fn) {
-	var values = {
-		id: param.id,
-		userId: param.userId,
-		title: param.title,
-		taxNo: param.taxNo,
-		bankName: param.bankName,
-		accountNo: param.accountNo,
-		address: param.address,
-		mobile: param.mobile
+function updateTax(param, fn) {
+	var match = {
+		id: param.taxId
 	};
 
+	var update = param;
+	delete update['taxId'];
+	update.updateTime = new Date();
 
 	var query = {
-		fileds: values,
-		values: values
+		match: match,
+		update: update
 	};
-
-	taxModel.create(query, function(err, rows) {
+	taxModel.update(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
-			console.error('failed to create tax ' + msg);
+			console.error(' failed to update tax ' + ' : ' + msg);
 			fn(err);
 		} else {
 			fn(null, rows);
@@ -97,29 +90,27 @@ function packageResponseData(data) {
 }
 
 function processRequest(param, fn) {
-	if (!validate(param)) {
+	if (!validate(param)){
 		var msg = 'invalid input data';
-		console.error(moduleName + ' : ' + msg);
+		console.error(moduleName + ' : '+ msg);
 		fn({
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
 	}
 
-	var taxNo = param.taxNo;
-	var taxId = dataHelper.createTaxId(taxNo);
-	param.id = taxId;
+	var taxId = param.taxId;
 
-	debug(' try to create the tax ' + taxId);
+	debug( ' try to update the taxInfo' + param.taxId);
 
-	createTax(param, function(err, rows) {
-		if (err) {
+	updateTax(param,function(err,rows){
+		if(err){
 			var msg = err.msg || err;
-			console.error(' failed to create the tax ' = taxId);
+			console.error(' failed to update the tax ' +  taxId);
 			fn(err);
-		} else {
-			var resData = packageResponseData(rows);
-			fn(null, resData);
+		}else{
+		 var resData = packageResponseData(rows);
+		 fn(null,resData);
 		}
 	});
 }
@@ -154,3 +145,4 @@ router.get(URLPATH, function(req, res, next) {
 
 
 module.exports.router = router;
+
