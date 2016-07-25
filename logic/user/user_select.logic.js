@@ -34,6 +34,7 @@ function validate(data) {
 			inputModel: data
 		});
 	}
+
 }
 //0-logout 1-login
 function checkUserState(param, fn) {
@@ -102,7 +103,7 @@ function selectUserInfo(param, fn) {
 			console.error(' select user info failed ' + msg);
 			fn(err);
 		} else {
-//console.log(rows);
+//console.log(rows[0]);
 			fn(null, rows[0]);
 			console.log(' success select user info ');
 		}

@@ -26,8 +26,8 @@ var refModel = {
 		data: 'userName',
 		rangeCheck: null
 	},
-	protrait: {
-		data: 'protrait',
+	portrait: {
+		data: 'portrait',
 		rangeCheck: null
 	},
 	age: {
@@ -37,7 +37,7 @@ var refModel = {
 	gender: {
 		data: 0,
 		rangeCheck: function(data) {
-			return is, inArray(data, [0, 1, 2]);
+			return is.inArray(data, [0, 1, 2]);
 		}
 	},
 	email: {
@@ -56,14 +56,14 @@ function validate(data) {
 		return logicHelper.validate({
 			debug: debug,
 			refModel: refModel,
-			debug: debug,
+			inputModel: data,
 			moduleName: moduleName
 		})
 	}
 }
 
 function updateUserInfo(param, fn) {
-console.log(param);
+//console.log(param);
 	var update = {
 		name: param.userName,
 		portrait: param.portrait,
@@ -72,7 +72,7 @@ console.log(param);
 		email: param.email,
 		updateTime : param.updateTime
 	};
-console.log(update);
+//console.log(update);
 	var match ={
 		id: param.userId
 	};
@@ -99,9 +99,9 @@ function packageResponseData(data){
 }
 
 function processRequest(param, fn){
-console.log(param);
 	if(!validate(param)){
-		var msg = 'invalid input data';
+
+		var msg = 'update invalid input data';
 		console.error(moduleName + ' : '+msg);
 		fn({code : errorCode.PARAM_INVALID,msg : msg});
 	}
@@ -111,7 +111,6 @@ console.log(param);
 
    	param.updateTime = new Date();
    	updateUserInfo(param,function(err,rows){
-console.log(param);
    		if(err){
    			console.error('failed to update the user');
    			fn(err);

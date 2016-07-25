@@ -28,6 +28,10 @@ var refModel = {
 	newPassword: {
 		data: 'newPassword',
 		rangeCheck: null
+	},
+	validatePas: {
+		data: 'validatePas',
+		rangeCheck: null	
 	}
 };
 
@@ -38,7 +42,7 @@ function validate(data) {
 		return logicHelper.validate({
 			debug: debug,
 			refModel: refModel,
-			debug: debug,
+			inputModel: data,
 			moduleName: moduleName
 		})
 	}
@@ -66,7 +70,7 @@ function queryPassword(param, fn) {
 			fn(err);
 		} else {
 			var result = rows[0];
-			fn(null, result); //the password
+			fn(null, result); //the password object
 		}
 	});
 }
@@ -75,11 +79,12 @@ function validatePas(data, fn) {
 	var oldPassword = data.oldPassword; //old password
 	var inputPassword = data.password; //input old password
 	var newPassword = data.newPassword;
+	var validatePassword = data.validatePas;
 	if (oldPassword !== inputPassword) {
 		var msg = 'updatePas input old password error';
 		console.error(msg);
 		fn({
-			code: errorCode.OLD_PASSWORD_ERROR,
+			code: errorCode.UPDATE_OLD_PASSWORD_ERROR,
 			msg: msg
 		});
 	} else {
@@ -87,14 +92,25 @@ function validatePas(data, fn) {
 			var msg = 'updatePas the old ane the new password same';
 			console.error(msg);
 			fn({
-				code: errorCode.SAME_PASSWORD_ERROR,
+				code: errorCode.OLD_PASSWORD_ERROR,
 				msg: msg
 			});
 		} else {
-			var rows = {
-				password: newPassword
-			};
-			fn(null, rows);
+			if(newPassword!==validatePassword){
+			var msg = 'the two password different';
+			console.error(msg);
+			fn({
+				code: errorCode.UPDATE_VALIDATE_ERROR,
+				msg: msg
+			});
+			
+			}else{
+				var rows = {
+				password : newPassword
+				};
+				console.log(rows);
+				fn(null,rows);
+			}
 		}
 
 	}
@@ -140,10 +156,11 @@ function processRequest(param, fn) {
 			msg: msg
 		});
 	}
-
-	param.userId = dataHelper.encrptPassword(param.userId);
-	param.inputPassword = dataHelper.encrptPassword(param.password)
-	param.newPassword = dataHelper.encrptPassword(password.newPassword);
+	
+	param.inputPassword = param.password;
+	//param.validatePas = dataHelper.encrptPassword(param.validatePas);
+	//param.inputPassword = dataHelper.encrptPassword(param.password);
+	//param.newPassword = dataHelper.encrptPassword(password.newPassword);
 	param.updateTime = new Date();
 
 	debug('try to update the user password' + param.userId);
@@ -156,10 +173,12 @@ function processRequest(param, fn) {
 				});
 			},
 			function(next, result) {
+console.log(result);
 				var data = {};
-				data.oldPassword = results.password;
+				data.oldPassword = result.password;
 				data.password = param.password;
 				data.newPassword = param.newPassword;
+				data.validatePas = param.validatePas;
 				validatePas(data, function(err, rows) {
 					next(err, rows);
 				});
@@ -171,7 +190,7 @@ function processRequest(param, fn) {
 			}
 		], function(err, result) {
 			if (err) {
-				consle.error(' failed to update password ' + param.userId);
+				console.error(' failed to update password ' + param.userId);
 				fn(err);
 			} else {
 				debug('success to udpate the password');

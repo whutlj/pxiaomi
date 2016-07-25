@@ -17,6 +17,7 @@ var refModel = {
     age : 20,
     gender : 0, //0-male ,1 -female
     type : 0, //0-user 1-admin
+    email :'pxiaomi@dmtec.cn',
     mobile :'13419503630',
     start : '',//the comment
     smscode : 'smscode',

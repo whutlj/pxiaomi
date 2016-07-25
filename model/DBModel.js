@@ -168,6 +168,8 @@ function lookup(query, fn) {
         });
         sqlstr += ca.join(' and ');
         sqlstr += ';';
+	
+	console.log(sqlstr);
 
         debug(model_name + ' lookup for ' + sqlstr);
 
@@ -403,6 +405,8 @@ function update(query, fn) {
         });
         sqlstr += ca.join(' and ');
         sqlstr += ';';
+
+	console.log(sqlstr);	
 
         debug('update: ' + sqlstr);
 
