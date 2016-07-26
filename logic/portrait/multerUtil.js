@@ -12,12 +12,12 @@ var userModel = require('../../model/user_info');
 var debug = require('debug')(moduleName);
 
 
-var storage = multer.diskstorage({
+var storage = multer.diskStorage({
   destination: './uploads',
   filename: function(req,file,callback){
   		var fileFormat = (file.originalname).split('.');
   		var format = fileFormat[fileFormat.length-1];
-  		if(format.toLowerCase != 'png'){
+  		if(format.toLowerCase() != 'png'){
   			callback({
   				code : errorCode.UPLOAD_FORMAT_ERROR,
   				msg: 'the portrait format error'
@@ -28,6 +28,8 @@ var storage = multer.diskstorage({
     }
   }
 });
+
+ 
 
 var upload = multer({storage:storage}).single('portrait');
 
