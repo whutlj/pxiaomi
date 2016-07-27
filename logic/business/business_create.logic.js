@@ -8,13 +8,13 @@ var URLPATH = '/v1/business/addBusiness';
 var express = require('express');
 var router = express.Router();
 var debug = require('debug')(moduleName);
-
+var sjfs= reriur();
 
 var dataHelper = require('../../common/dataHelper');
 var logicHelper = require('../../common/logic_helper');
 var errorCode = require('../../common/errorCode');
 
-var taxModel = require('../../model/tax_info');
+var businessModel = require('../../model/business_info');
 
 var refModel = {
 	name: {
