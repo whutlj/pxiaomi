@@ -1,7 +1,5 @@
 'use strict';
 
-
-
 var moduleName = 'business_user_select.logic';
 var URLPATH = '/v1/user/businessInfo';
 var tableName = 'tb_business_info';
