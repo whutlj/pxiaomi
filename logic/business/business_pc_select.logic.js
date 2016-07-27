@@ -2,7 +2,7 @@
 
 
 
-var moduleName = 'business_select_pc.logic';
+var moduleName = 'business_pc_select.logic';
 var URLPATH = '/v1/pc/businessInfo';
 
 var express = require('express');
