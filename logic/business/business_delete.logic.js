@@ -2,7 +2,7 @@
 
 
 var moduleName = 'business_delete.logic';
-var URLPATH = '/v1/pc/deleteBusiness';
+var URLPATH = '/v1/business/deleteBusiness';
 
 
 var express = require('express');

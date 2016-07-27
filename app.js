@@ -127,10 +127,10 @@ app.use(acl.router);
 
 
 ///////////////////////////////////////////////////////
-*/
+
 var api_portrait = require('./logic/portrait/multerUtil');
 app.use(api_portrait.router);
-
+*/
 
 // Mount logic API ////////////////////////////////////
 //user interfaces

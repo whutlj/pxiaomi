@@ -2,7 +2,7 @@
 
 
 var moduleName = 'business_create.logic';
-var URLPATH = '/v1/pc/addBusiness';
+var URLPATH = '/v1/business/addBusiness';
 
 
 var express = require('express');

@@ -2,7 +2,7 @@
 
 
 var moduleName = 'business_update.logic';
-var URLPATH = '/v1/pc/updateBusiness';
+var URLPATH = '/v1/business/updateBusiness';
 
 
 var express = require('express');
