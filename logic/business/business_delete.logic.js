@@ -1,26 +1,27 @@
 'use strict';
 
 
-var moduleName = 'tax_selectAll.logic';
-var URLPATH = '/v1/tax/taxInfo';
+var moduleName = 'business_delete.logic';
+var URLPATH = '/v1/pc/deleteBusiness';
+
 
 var express = require('express');
 var router = express.Router();
-var debug = require('debug');
+var debug = require('debug')(moduleName);
 
 var dataHelper = require('../../common/dataHelper');
 var logicHelper = require('../../common/logic_helper');
 var errorCode = require('../../common/errorCode');
 
-var taxModel = require('../../model/tax_info');
+var businessModel = require('../../model/business_info');
+
 
 var refModel = {
-	userId : {
-		data : 'userId',
-		rangeCheck : null
+	businessId: {
+		data: 'businessId',
+		rangeCheck: null
 	}
 };
-
 
 function validate(data) {
 	if (!data) {
@@ -34,33 +35,26 @@ function validate(data) {
 	});
 }
 
+function deleteBusiness(param, fn) {
+	var businessId = param.businessId;
 
-function selectAllTax(param,fn){
-	var userId = param.userId;
-	
-	var select = {
-		id : 'id',
-		title : 'title',
-		taxNo : 'taxNo',
-		bankDeposit : 'bankDeposit',
-		accountNo : 'accountNo',
-		address : 'address',
-		mobile : 'mobile'
+	var match = {
+		id: businessId
 	};
- 	
-	var match ={
-		userId : userId,
-		state : 0
+
+	var update = {
+		state: 2,
+		updateTime: new Date()
 	};
 
 	var query = {
-		select :select,
-		match : match
+		match: match,
+		update: update
 	};
-	taxModel.lookup(query,function(err,rows){
+	businessModel.update(query,function(err,rows){
 		if(err){
 			var msg = err.msg || err;
-			console.error(' failed to select all tax '+ ' : '+ msg);
+			console.log(' failed to update the business state ' + businessId);
 			fn(err);
 		}else{
 			fn(null,rows);
@@ -68,18 +62,14 @@ function selectAllTax(param,fn){
 	});
 }
 
-function packageResponseData(data){
-	if(!data){
-		var resData = {};
-		return resData;
-	}else{
-		var resData = data;
-		return resData;
-	}
+
+
+function packageResponseData(data) {
+	var resData = {};
+	return resData;
 }
 
-
-function processRequest(param,fn){
+function processRequest(param, fn) {
 	if (!validate(param)) {
 		var msg = 'invalid input data';
 		console.error(moduleName + ' : ' + msg);
@@ -89,21 +79,22 @@ function processRequest(param,fn){
 		});
 	}
 
+	var businessId = param.businessId;
+	
+	
+	debug(' try to delete the business ' + businessId);
 
-	debug(' try to select all tax '+ param.userId);
-
-	selectAllTax(param,function(err,rows){
-		if(err){
-			var msg = err.mag || err;
-			console.error( 'failed to select all tax ' + ' : '+ msg);
+	deleteTax(param, function(err, rows) {
+		if (err) {
+			var msg = err.msg || err;
+			console.error(' failed to delete the business ' + businessId);
 			fn(err);
-		}else{
+		} else {
 			var resData = packageResponseData(rows);
-			fn(null,resData);
+			fn(null, resData);
 		}
 	});
 }
-
 
 //get interface
 router.get(URLPATH, function(req, res, next) {
@@ -120,7 +111,6 @@ router.get(URLPATH, function(req, res, next) {
 });
 
 
-
 //post interface for mocha testing
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
@@ -134,5 +124,6 @@ router.post(URLPATH, function(req, res, next) {
 		param: param
 	});
 });
+
 
 module.exports.router = router;

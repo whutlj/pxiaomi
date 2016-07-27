@@ -53,6 +53,11 @@ function createTaxId(options){
 	var taxId = createId();
 	return taxId;
 }
+
+function createBusinessId(options){
+	var businessId = createdId();
+	return businessId;
+}
 /*
 function createUserTokenId(options) {
 	var userId = options.userId;
