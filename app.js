@@ -46,7 +46,7 @@ app.use(session({
 /// body parser
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded());//for parsing application/x-www-form-urlencoded
 
 /*
 /// morgan log
@@ -131,6 +131,11 @@ app.use(acl.router);
 var api_portrait = require('./logic/portrait/multerUtil');
 app.use(api_portrait.router);
 */
+
+//upload portrait
+var multer = require('multer');
+var upload = require('./logic/upload');
+app.use(upload);
 
 // Mount logic API ////////////////////////////////////
 //user interfaces
