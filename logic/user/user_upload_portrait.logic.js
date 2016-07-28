@@ -9,10 +9,13 @@ var router = express.Router();
 var upload = multerUtil.single('name');
 
 var processRequest = function(req,res){
+	var json
 	upload(req,res,function(err){
 		if(err){
 			console.error('upload  portrait error');
 		}
+		//return file.path
+	
 	});
 	console.log(req.file);
 };

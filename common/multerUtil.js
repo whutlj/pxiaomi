@@ -11,13 +11,13 @@ var storage = multer.diskStorage({
   destination: function(req,file,callback){
   		var url = req.url;
   		var filePath = '../uploads';
-  		swith(url){
+  		switch(url){
   			case '/v1/upload/user/portrait':
-        filePath + = constantsHelper.SERVER.PORTRAIT ;
+        filePath += constantsHelper.SERVER.PORTRAIT ;
   			callback(null,filePath);
         break;
         case '/v1/upload/user/file':
-        filePath + = constantsHelper.SERVER.FILE;
+        filePath += constantsHelper.SERVER.FILE;
         callback(null,filePath);
         break;
         default:
@@ -31,7 +31,6 @@ var storage = multer.diskStorage({
       var rename = filename+random+originalname;
     	callback(null,rename);
     }
-  }
 });
 
 var upload = multer({
