@@ -138,7 +138,7 @@ function createSMSCode() {
 	return smscode;
 }
 
-/*
+
 function createParentPath(date) {
 	var d = new Date();
 	var parentpath = date.getFullYear() + "-";
@@ -152,7 +152,7 @@ function createParentPath(date) {
 	return parentpath;
 }
 
-*/
+
 
 module.exports.createUserId = createUserId;
 module.exports.createTaxId = createTaxId;
@@ -164,4 +164,4 @@ module.exports.createBusinessId = createBusinessId;
 // module.exports.createGroupName = createGroupName;
 module.exports.createId = createId;
 module.exports.createSMSCode = createSMSCode;
-// module.exports.createParentPath = createParentPath;
+module.exports.createParentPath = createParentPath;

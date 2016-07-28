@@ -38,4 +38,4 @@ var upload = multer({
 	storage: storage
 });
 
-module.exports.upload = upload;
+module.exports = upload;

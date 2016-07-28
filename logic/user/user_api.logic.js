@@ -14,7 +14,7 @@ var api_user_select =require('./user_select.logic');
 var api_user_update = require('./user_update.logic');
 var api_user_updatePas = require('./user_updatePas.logic');
 var api_user_logout = require('./user_logout.logic');
-//var api_user_portrait = require('./user_portrait.logic');
+var api_user_portrait = require('./user_upload_portrait.logic');
 
 router.use(api_user_create.router);
 router.use(api_user_login.router);
@@ -22,7 +22,7 @@ router.use(api_user_select.router);
 router.use(api_user_update.router);
 router.use(api_user_updatePas.router);
 router.use(api_user_logout.router);
-//router.use(api_user_portrait.router);
+router.use(api_user_portrait.router);
 
 
 

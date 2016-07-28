@@ -132,11 +132,6 @@ var api_portrait = require('./logic/portrait/multerUtil');
 app.use(api_portrait.router);
 */
 
-//upload portrait
-var multer = require('multer');
-var upload = require('./logic/upload');
-app.use(upload);
-
 // Mount logic API ////////////////////////////////////
 //user interfaces
 var api_user = require('./logic/user/user_api.logic');
