@@ -33,6 +33,10 @@ var refModel = {
 		data: 'telephone',
 		rangeCheck: null
 	},
+ 	email:{
+		data: 'email',
+		rangeCheck:null
+	},
 	type: {
 		data: 'type',
 		rangeCheck: null
@@ -55,6 +59,10 @@ var refModel = {
 	},
 	address: {
 		data: 'address',
+		rangeCheck: null
+	},
+	postcode:{
+		data:'postcode',
 		rangeCheck: null
 	},
 	logitude: {
@@ -87,12 +95,14 @@ function updateBusiness(param, fn) {
 		name: param.name,
 		mobile: param.mobile,
 		telephone: param.telephone,
+		email: param.email,
 		type: param.type,
 		provice: param.provice,
 		city: param.city,
 		district: param.district,
 		town: param.town,
 		address: param.address,
+		postcode: param.postcode,
 		logitude: param.logitude,
 		latitude: param.latitude,
 		updateTime: new Date()

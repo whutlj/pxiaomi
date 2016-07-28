@@ -163,7 +163,7 @@ function lookup(query, fn) {
                 var date = moment(match[k]).format('YYYY-MM-DD HH:mm:ss');
                 ca.push('' + k + '=' + '\'' + date + '\'');
             } else {
-                ca.push('' + k + '=' +match[k]);
+                ca.push('' + k + '=' + (typeof match[k]=== 'string'  ?'"'+match[k]+'"':match[k]));
             }
         });
         sqlstr += ca.join(' and ');
@@ -296,7 +296,7 @@ function create(query, fn) {
         sqlstr += va.join(',');
         sqlstr += ';';
 
-	//console.log(sqlstr);
+	console.log(sqlstr);
 	
         debug(table_name + ' create sql: ' + sqlstr);
 
@@ -495,6 +495,8 @@ function remove(query, fn) {
         sqlstr += ca.join(' and ');
         sqlstr += ';';
 
+console.log(sqlstr);
+
         // Use the connection
         connection.query({
             sql: sqlstr,
@@ -622,6 +624,9 @@ function query(param, fn) {
 
     var timeout = param.timeout || TIMEOUT;
     var sqlstr = param.sqlstr || param.sqlStr || param;
+
+
+   console.log(sqlstr);
 
     debug(model_name + ' calling Database query');
 

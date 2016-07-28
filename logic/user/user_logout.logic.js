@@ -110,6 +110,7 @@ router.post(URLPATH,function(req,res,next){
 
 router.get(URLPATH,function(req,res,next){	
 	var param = req.query;
+console.log(param);
 	logicHelper.responseHttp({
 		res: res,
 		req: req,

@@ -14,14 +14,14 @@ var dataHelper = require('../../common/dataHelper');
 var logicHelper = require('../../common/logic_helper');
 var errorCode = require('../../common/errorCode');
 
-var businessModel = require('../../common/business_info');
+var businessModel = require('../../model/business_info');
 
 
 var refModel = {
 	businessId: {
 		data: 'businessId',
 		rangeCheck: null
-	};
+	}
 };
 
 function validate(data) {
@@ -90,11 +90,13 @@ function packageResponseData(data) {
 			name : data.name,
 			mobile: data.mobile,
 			telephone: data.telephone,
+			email: data.email,
 			provice: data.provice,
 			city: data.city,
 			district: data.district,
 			town: data.town,
 			address: data.address,
+			postcode: data.postcode,
 			logitude: data.logitude,
 			latitude: data.latitude
 		};
@@ -115,7 +117,7 @@ function processRequest(param, fn) {
 
 	debug(' try to select the business info '+ param.businessId);
 
-	queryBusiness(param, funciton(err, rows) {
+	queryBusiness(param, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
 			console.error(' failed to select businessInfo ' + err);
@@ -132,6 +134,7 @@ function processRequest(param, fn) {
 //get interface
 router.get(URLPATH, function(req, res, next) {
 	var param = req.query;
+
 	logicHelper.responseHttp({
 		res: res,
 		req: req,

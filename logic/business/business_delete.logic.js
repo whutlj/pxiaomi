@@ -84,7 +84,7 @@ function processRequest(param, fn) {
 	
 	debug(' try to delete the business ' + businessId);
 
-	deleteTax(param, function(err, rows) {
+	deleteBusiness(param, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
 			console.error(' failed to delete the business ' + businessId);

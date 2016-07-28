@@ -1,5 +1,5 @@
 'use strict';
-var model_name = 'businexx.model';
+var model_name = 'business.model';
 var table_name = 'tb_business_info';
 
 var debug = require('debug')(model_name);
@@ -14,12 +14,12 @@ var refModel = {
     name : 'name',
     mobile : 'mobile',
     telephone : 'telephone',
-    eamil : 'email',
+    email : 'email',
     type : 0,
-    provice : 'provice', //0-user 1-admin
+    provice : 'provice',
     city :'city',
     district :'district',
-    town : 'town',//the comment
+    town : 'town',
     address : 'address',
     postcode: 'postcode',
     logitude: 'logitude',

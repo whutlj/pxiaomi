@@ -8,7 +8,6 @@ var URLPATH = '/v1/business/addBusiness';
 var express = require('express');
 var router = express.Router();
 var debug = require('debug')(moduleName);
-var sjfs= reriur();
 
 var dataHelper = require('../../common/dataHelper');
 var logicHelper = require('../../common/logic_helper');
@@ -27,6 +26,10 @@ var refModel = {
 	},
 	telephone: {
 		data: 'telephone',
+		rangeCheck: null
+	},
+	email: {
+		data: 'email',
 		rangeCheck: null
 	},
 	type: {
@@ -52,6 +55,10 @@ var refModel = {
 	address: {
 		data: 'address',
 		rangeCheck: null
+	},
+	postcode: {
+		data :'postcode',
+		rangeCheck :null
 	},
 	logitude: {
 		data: 'logitude',
@@ -84,12 +91,14 @@ function createBusiness(param, fn) {
 		name: param.name,
 		mobile: param.mobile,
 		telephone: param.telephone,
+		email: param.email,
 		type: param.type,
 		provice: param.provice,
 		city: param.city,
 		district: param.district,
 		town: param.town,
 		address: param.address,
+		postcode: param.postcode,
 		logitude: param.logitude,
 		latitude: param.latitude
 	};
@@ -99,7 +108,7 @@ function createBusiness(param, fn) {
 		values: values
 	};
 
-	//console.log(query);
+	
 	businessModel.create(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
@@ -118,13 +127,14 @@ function packageResponseData(data) {
 	}
 
 	var resData = {
-		businessId: data.businessId || data;
+		businessId: data.businessId || data
 	};
 
 	return resData;
 }
 
 function processRequest(param, fn) {
+	
 	if (!validate(param)) {
 		var msg = 'invalid input data';
 		console.error(moduleName + ' : ' + msg);
@@ -133,7 +143,7 @@ function processRequest(param, fn) {
 			msg: msg
 		});
 	}
-
+console.log(param);
 	var businessId = dataHelper.createBusinessId(param);
 	param.id = businessId;
 
@@ -153,7 +163,9 @@ function processRequest(param, fn) {
 
 //post interface
 router.post(URLPATH, function(req, res, next) {
+
 	var param = req.body;
+//console.log(param);
 	logicHelper.responseHttp({
 		res: res,
 		req: req,

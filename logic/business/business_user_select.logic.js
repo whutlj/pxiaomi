@@ -15,15 +15,15 @@ var dataHelper = require('../../common/dataHelper');
 var logicHelper = require('../../common/logic_helper');
 var errorCode = require('../../common/errorCode');
 
-var businessModel = require('../../common/business_info');
+var businessModel = require('../../model/business_info');
 
 
 var refModel = {
 	nameInfo: {
 		data: 'nameInfo',
 		rangeCheck: null
-	};
-}
+	}
+};
 
 function validate(data) {
 	if (!data) {
@@ -86,7 +86,7 @@ function processRequest(param, fn) {
 
 	debug(' try to select all appropriate business ');
 
-	queryBusiness(param, funciton(err, rows) {
+	queryBusiness(param, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
 			console.error(' failed to select businessInfo ' + err);

@@ -55,7 +55,7 @@ function createTaxId(options){
 }
 
 function createBusinessId(options){
-	var businessId = createdId();
+	var businessId = createId();
 	return businessId;
 }
 /*
@@ -156,6 +156,7 @@ function createParentPath(date) {
 
 module.exports.createUserId = createUserId;
 module.exports.createTaxId = createTaxId;
+module.exports.createBusinessId = createBusinessId;
 //module.exports.createUserTokenId = createUserTokenId;
 // module.exports.createOrderId = createOrderId;
 // module.exports.createOrderProcessId = createOrderProcessId;
