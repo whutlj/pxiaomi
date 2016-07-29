@@ -13,7 +13,9 @@ var async = require('async');
 
 var debug = require('debug')(moduleName);
 var userModel = require('../../model/user_info');
-var logicHelper = require('../../model/logic_helper');
+var logicHelper = require('../../common/logic_helper');
+var errorCode = require('../../common/errorCode');
+/*
 var refModel = {
 	userId: {
 		data: 'userId',
@@ -21,7 +23,7 @@ var refModel = {
 	}
 };
 
-funciton validate(data) {
+function validate(data) {
 	if (!data) {
 		return false;
 	} else {
@@ -30,14 +32,13 @@ funciton validate(data) {
 			refModel: refModel,
 			inputModel: data,
 			moduleName: moduleName
-		})
+		});
 	}
 }
-
+*/
 function savePortrait(param, fn) {
-	var body = param.body;
-	var portrait = body.portrait;
-	var userId = body.userId;
+	var portrait = param.portrait;
+	var userId = param.userId;
 	var match = {
 		id: userId
 	};
@@ -61,9 +62,12 @@ function savePortrait(param, fn) {
 	});
 }
 
-function uploadPortrait(param, fn) {
-	var req = param;
-	upload(req, function(err) {
+
+
+function processRequest(param, fn) {
+	var req = param.req;
+	var res = param.res;
+	upload(req,res,function(err){
 		if (err) {
 			var msg = err;
 			console.error('upload error ' + msg);
@@ -72,47 +76,35 @@ function uploadPortrait(param, fn) {
 				message: msg
 			});
 		} else {
-			var resData = {};
-			fn(null, resData);
+			var param = req.body;
+			var file = req.file;
+			var filename = file.filename;
+			param.portrait = filename;
+	console.log(req.file);
+	console.log(param);
+			
+			savePortrait(param,function(err,rows){
+				if(err){
+					fn(err);
+				}else{
+					var resData ={ portraitURL: filename};
+					fn(null,resData);
+				}
+			});
 		}
+
 	});
-}
-
-function processRequest(param, fn) {
-	if (!validate(param)) {
-		var msg = 'update invalid input data';
-		console.error(moduleName + ' : ' + msg);
-		fn({
-			code: errorCode.PARAM_INVALID,
-			msg: msg
-		});
-	}
-	async.series(
-		[
-
-			function(next) {
-				uploadPortrait(param, next);
-			},
-			function(next) {
-				savePortrait(param, next);
-			}
-		],
-		function(err, result) {
-			if (err) {
-				var msg = err.msg || err;
-				console.error(' upload portrait failed' + msg);
-				fn(err);
-			} else {
-				fn(null, result);
-			}
-		}
-	);
 }
 
 
 
 router.post(URLPATH, function(req, res, next) {
-		var param = req;
+//console.log(req);
+		var param = {
+			req:req,
+			res:res
+		};
+	console.log(req.body);
 		logicHelper.responseHttp({
 			res: res,
 			req: req,
@@ -124,5 +116,11 @@ router.post(URLPATH, function(req, res, next) {
 		});
 
 	}
-
+);
+/*
+router.post(URLPATH,upload, function(req, res, next) {
+	console.log(req);
+}
+);
+*/
 module.exports.router = router;

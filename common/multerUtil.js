@@ -10,7 +10,7 @@ var constantsHelper = require('../common/constants');
 var storage = multer.diskStorage({
   destination: function(req,file,callback){
   		var url = req.url;
-  		var filePath = '../uploads';
+  		var filePath = './uploads';
   		switch(url){
   			case '/v1/upload/user/portrait':
         filePath += constantsHelper.SERVER.PORTRAIT ;
@@ -25,10 +25,11 @@ var storage = multer.diskStorage({
   		}
   },
   filename: function(req,file,callback){
+	//console.log(file);
   		var originalname = file.originalname;
-      var filedname = file.filedname;
+      var fieldname = file.fieldname;
       var random = dataHelper.createId();
-      var rename = filename+random+originalname;
+      var rename = fieldname+'.'+random+'.'+originalname;
     	callback(null,rename);
     }
 });
