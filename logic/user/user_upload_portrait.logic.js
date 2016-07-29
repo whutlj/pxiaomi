@@ -79,6 +79,7 @@ function processRequest(param, fn) {
 			var param = req.body;
 			var file = req.file;
 			var filename = file.filename;
+			var path = file.path;
 			param.portrait = filename;
 	console.log(req.file);
 	console.log(param);
@@ -87,7 +88,7 @@ function processRequest(param, fn) {
 				if(err){
 					fn(err);
 				}else{
-					var resData ={ portraitURL: filename};
+					var resData ={ portraitURL: path};
 					fn(null,resData);
 				}
 			});

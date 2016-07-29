@@ -25,7 +25,7 @@ var refModel = {
 		data: 'taxId',
 		rangeCheck: null
 	},
-	business: {
+	businessId: {
 		data: 'businessId',
 		rangeCheck: null
 	},
@@ -47,8 +47,8 @@ var refModel = {
 		data: 'taxNo',
 		rangeCheck: null
 	},
-	bankDeposite: {
-		data: 'bankDeposite',
+	bankDeposit: {
+		data: 'bankDeposit',
 		rangeCheck: null
 	},
 	accountNo: {
@@ -56,18 +56,19 @@ var refModel = {
 		rangeCheck: null
 	},
 	address: {
-		address: 'address',
+		data: 'address',
 		rangeCheck: null
 	},
 	mobile: {
 		data: 'mobile',
 		rangeCheck: null
 	},
-	business: {
-		data: 'business',
+	businessName: {
+		data: 'businessName',
 		rangeCheck: null
 	}
 };
+
 
 function validate(data) {
 	if (!data) {
@@ -89,17 +90,21 @@ function saveBill(param, fn) {
 		taxId: param.taxId,
 		businessId: param.businessId,
 		userId: param.userId,
-		amount: param.amount,
-		type: 0,
-		state: 1 //1-invalid 
+		amount: param.amount,	
+                type: 1,
+		state: 1
 	};
+	
+
 	var query = {
-		select: values,
+		fields: values,
 		values: values
 	};
-
+	
+	//console.log(query);
 	billModel.create(query, function(err, rows) {
 		if (err) {
+
 			var msg = err.msg || err;
 			console.error(' failed to create bill ' + ' : ' + msg);
 			fn(err);
@@ -116,9 +121,9 @@ function packageResponseData(data){
 	var resData = {
 		billId: data.id,
 		type: data.type,
-		title: data.,title,
+		title: data.title,
 		taxNo: data.taxNo,
-		bankDeposite: data.bankDeposite,
+		bankDeposite: data.bankDeposit,
 		accountNo: data.accountNo,
 		addres: data.addres,
 		mobile: data.mobile,
@@ -130,8 +135,7 @@ function packageResponseData(data){
 	
 
 // just a test
-function processRequset(param, fn) {
-	if (!validate() param) {
+function processRequest(param, fn) {
 		if (!validate(param)) {
 			var msg = 'invalid input data';
 			console.error(moduleName + ': ' + msg);
@@ -140,7 +144,6 @@ function processRequset(param, fn) {
 				msg: msg
 			});
 		}
-	}
 
 	var billId = dataHelper.createBillId();
 	param.id = billId;

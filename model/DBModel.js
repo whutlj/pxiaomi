@@ -212,10 +212,11 @@ function create(query, fn) {
     var values = query.values; // value's key must match to fields
     var timeout = query.timeout || TIMEOUT;
 
+
+console.log(values);
     if (!Array.isArray(values)) {
         values = [values];
     }
-
     //set the default value
     for (var i = 0; i < values.length; i++) {
         var value = values[i];
@@ -223,11 +224,11 @@ function create(query, fn) {
         value.createTime = value.createTime || new Date();
         value.updateTime = value.updateTime || new Date();
     }
-
-    expect.state = refModel.state;
-    expect.createTime = refModel.createTime;
-    expect.updateTime = refModel.updateTime;
-
+console.log(values);
+    expect.state = values[0].state;
+    expect.createTime = values[0].createTime;
+    expect.updateTime = values[0].createTime;
+console.log(values);
 
     // 1.
     // Validate input
@@ -265,6 +266,8 @@ function create(query, fn) {
                 msg: err
             });
         }
+		//console.log(fields);
+		//console.log(values);
 
         // 2.1
         // Construct SQL string       
@@ -273,7 +276,8 @@ function create(query, fn) {
 
         // fields part
         sqlstr += ' (' + Object.keys(fields).join(',') + ') ';
-
+	
+	
         // values part
         var va = [];
         values.forEach(function(v) {
