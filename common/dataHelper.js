@@ -33,14 +33,6 @@ function createSha1Data(inputs) {
 }
 
 
-// encrpt the password
-// function encrptPassword(data) {
-// 	var hash = crypto.createHash('sha1');
-// 	hash.update(salt);
-//         hash.update(data,'binary');
-// 	var sign = hash.digest('hex');
-// 	return sign;
-// }
 
 
 function createUserId(options) {
@@ -58,6 +50,13 @@ function createBusinessId(options){
 	var businessId = createId();
 	return businessId;
 }
+
+
+function createBillId(options){
+	var billId = createId();
+	return billId;
+}
+
 /*
 function createUserTokenId(options) {
 	var userId = options.userId;
@@ -165,3 +164,4 @@ module.exports.createBusinessId = createBusinessId;
 module.exports.createId = createId;
 module.exports.createSMSCode = createSMSCode;
 module.exports.createParentPath = createParentPath;
+module.exports.createBillId = createBillId;

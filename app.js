@@ -147,6 +147,9 @@ app.use(api_tax.router);
 var api_business = require('./logic/business/business_api.logic');
 app.use(api_business.router);
 
+//bill inerface
+var api_bill = require('./logic/bill/bill_api.logic');
+app.use(api_bill.router);
 ///////////////////////////////////////////////
 //static path
 app.use(express.static(__dirname + '/files'));

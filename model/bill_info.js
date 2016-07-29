@@ -15,7 +15,7 @@ var refModel = {
     userId : 'userId',
     businessId : 'businessId',
     amount : 'amount',
-    type : 0,
+    type : 0,//default complete bill
     content : 'content', 
     createTime : new Date(),
     updateTime : new Date(),
