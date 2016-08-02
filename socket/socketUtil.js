@@ -16,5 +16,14 @@ function findSocket(options){
 	};
 }
 
+function spliceSocket(socket){
+	for(var i = 0;i<clients.length;i++){
+		if(clients[i].socket === socket){
+			clients.splice(socket,1);	
+		}
+	}
+}
+
 module.exports.pushSocket = pushSocket;
 module.exports.findSocket = findSocket;
+module.exports.spliceSocket = spliceSocket;

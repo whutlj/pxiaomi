@@ -142,9 +142,10 @@ function packageResponseData(data){
 function sendData(param,fn){
 		try{
 			var socket = socketUtil.findSocket(param);
-			var json = JSON.parse(param.data);
-			console.log(json);
-			socket.write(json);
+			var resData = packageResponseData(param);
+			var str = JSON.stringify(resData);
+			var buf = new Buffer(str,'utf8');
+			socket.write(buf);
 		}catch(e){
 			fn(e);
 		}
@@ -164,24 +165,28 @@ function processRequest(param, fn) {
 	var billId = dataHelper.createBillId();
 	param.id = billId;
 
-	async.series([
-		function(next){
-			var options = {
-				businessId: param.businessId
-			};
-			sendData(options,next);
-		},function(next){
-			saveBill(param,next);
-		}],
-		function(err,rows){
-		if(err){
+	sendData(param);
+
+
+
+	//save bill
+	saveBill(param,function(err,rows){
+
+	if(err){
 			var msg = err.msg || err;
 			fn(err);
 		}else{
 			var resData = packageResponseData(param);
 			fn(null,resData);
 		}
-	});
+	
+
+});
+	
+
+
+
+
 }
 
 router.post(URLPATH,function(req,res,next){

@@ -20,7 +20,7 @@ var server = net.createServer(function(socket){
 	});
 
 	socket.on('end',function(){
-		socket.write(' connection break ');
+		socletUtil.spliceSocket(socket);
 	});
 
 }).on('error',function(err){
