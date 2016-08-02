@@ -16,6 +16,7 @@ var billModel = require('../../model/bill_info');
 var taxModel = require('../../model/tax_info');
 var businessModel = require('../../model/business_info');
 
+var socketUtil= require('../../socket/socketUtil');
 
 var refModel = {
 	userId: {
@@ -155,7 +156,11 @@ function processRequest(param, fn) {
 			fn(err);
 		}else{
 			var resData = packageResponseData(param);
-			
+			var socket = socketUtil.findSocket(param);
+		console.log(param);
+			var json = JSON.parse(resData);
+			console.log(json);
+			socket.write(json);
 			fn(null,resData);
 		}
 	});

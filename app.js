@@ -12,10 +12,17 @@ var fs = require('fs');
 var debug = require('debug')('pxiaomi.app');
 var port = (process.env.PORT_ENV && parseInt(process.env.PORT_ENV, 10)) || 6188;
 
+var socketPort = 8989;
+
 
 // Middlewares
 var constantHelper = require('./common/constants');
 var dataHelper = require('./common/dataHelper');
+
+var server =require('./socket/socket_server').server;
+
+server.listen(socketPort);
+
 
 /*
 /// cookie

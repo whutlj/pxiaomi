@@ -2,9 +2,9 @@
 
 
 var net = require('net');
-var SocketClient = require('./client_sockets.js');
+var SocketClient = require('./client_sockets');
 
-var clients = [];
+var socketUtil = require('./socketUtil');
 
 var server = net.createServer(function(socket){
 	socket.setEncoding('utf8');
@@ -16,12 +16,11 @@ var server = net.createServer(function(socket){
 		socket: socket
 		};
 		var socketClient = new SocketClient(clientSocket);
-		clients.push(socketClient);
-		socket.write('haha');
+		socketUtil.pushSocket(socketClient);
 	});
 
 	socket.on('end',function(){
-		console.log(clients);
+		socket.write(' connection break ');
 	});
 
 }).on('error',function(err){
@@ -30,3 +29,4 @@ var server = net.createServer(function(socket){
 	console.log('server close');
 });
 
+module.exports.server = server;
