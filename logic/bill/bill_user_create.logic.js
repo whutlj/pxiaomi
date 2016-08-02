@@ -7,6 +7,8 @@ var express = require('express');
 var router = express.Router();
 var debug = require('debug')(moduleName);
 var is = require('is_js');
+var async = require('async');
+
 
 var dataHelper = require('../../common/dataHelper');
 var logicHelper = require('../../common/logic_helper');
@@ -116,6 +118,7 @@ function saveBill(param, fn) {
 	});
 }
 
+
 function packageResponseData(data){
 	if(!data){
 		var resData = {};
@@ -136,6 +139,17 @@ function packageResponseData(data){
 }
 	
 
+function sendData(param,fn){
+		try{
+			var socket = socketUtil.findSocket(param);
+			var json = JSON.parse(param.data);
+			console.log(json);
+			socket.write(json);
+		}catch(e){
+			fn(e);
+		}
+}
+
 // just a test
 function processRequest(param, fn) {
 		if (!validate(param)) {
@@ -150,17 +164,21 @@ function processRequest(param, fn) {
 	var billId = dataHelper.createBillId();
 	param.id = billId;
 
-	saveBill(param,function(err,rows){
+	async.series([
+		function(next){
+			var options = {
+				businessId: param.businessId
+			};
+			sendData(options,next);
+		},function(next){
+			saveBill(param,next);
+		}],
+		function(err,rows){
 		if(err){
 			var msg = err.msg || err;
 			fn(err);
 		}else{
 			var resData = packageResponseData(param);
-			var socket = socketUtil.findSocket(param);
-		console.log(param);
-			var json = JSON.parse(resData);
-			console.log(json);
-			socket.write(json);
 			fn(null,resData);
 		}
 	});

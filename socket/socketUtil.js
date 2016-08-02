@@ -8,12 +8,12 @@ function pushSocket(socketClient){
 
 function findSocket(options){
 	var businessId = options.businessId;
-	clients.Foreach(function(socketClient){
-		if(socketClient.businessId == businessId){
-			var socket = socketClient.socket;
+	for(var i = 0;i<clients.length;i++){
+		if(clients[i].businessId == businessId){
+			var socket = clients[i].socket;
 			return socket; 		
 		}
-	});
+	};
 }
 
 module.exports.pushSocket = pushSocket;
