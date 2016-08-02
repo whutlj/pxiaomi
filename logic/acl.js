@@ -1,11 +1,3 @@
-// acl control api
-// copyright@dmtec.cn reserved, 2016
-/*
- * history:
- * 2016.07.08, created by Andy.zhou
- *  
- */
-
 'use strict';  
 var moduleName = 'acl.logic';
 var URLPATH = '/v1/*';
