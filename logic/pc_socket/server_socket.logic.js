@@ -3,7 +3,7 @@
 
 var net = require('net');
 
-var SERVER_PORT = 9898;
+var SERVER_PORT = 10000;
 
 
 var server = net.createServer();
@@ -31,6 +31,8 @@ server.on('connection',function(clientSocket){
 		console.log(clientSocket.businessId);
 	});
 
+}).on('error',function(){
+	console.log('error');
 });
 
 
