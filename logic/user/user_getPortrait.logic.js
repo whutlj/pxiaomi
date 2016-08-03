@@ -16,3 +16,12 @@ var errorCode = require('../../common/errorCode');
 var dataHelper = require('../../common/dataHelper');
 var logicHelper = require('../../common/logic_helper');
 
+
+
+
+router.get(URLPATH,function(req,res,next){
+	var param = req.query;
+
+
+
+});

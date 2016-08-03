@@ -108,7 +108,6 @@ function saveBill(param, fn) {
 	//console.log(query);
 	billModel.create(query, function(err, rows) {
 		if (err) {
-
 			var msg = err.msg || err;
 			console.error(' failed to create bill ' + ' : ' + msg);
 			fn(err);
