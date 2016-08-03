@@ -10,6 +10,8 @@ var server = net.createServer(function(socket){
 	socket.setEncoding('utf8');
 	socket.on('data',function(data){
 		var json = JSON.parse(data);
+		var operation = json.operation;
+		if(operation==0){
 		var businessId = json.businessId;
 		var clientSocket = {
 		businessId: businessId,
@@ -17,6 +19,7 @@ var server = net.createServer(function(socket){
 		};
 		var socketClient = new SocketClient(clientSocket);
 		socketUtil.pushSocket(socketClient);
+	}
 	});
 
 	socket.on('end',function(){

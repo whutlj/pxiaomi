@@ -18,7 +18,7 @@ var billModel = require('../../model/bill_info');
 var taxModel = require('../../model/tax_info');
 var businessModel = require('../../model/business_info');
 
-var socketUtil= require('../../socket/socketUtil');
+var socketUtil = require('../../socket/socketUtil');
 
 var refModel = {
 	userId: {
@@ -94,17 +94,17 @@ function saveBill(param, fn) {
 		taxId: param.taxId,
 		businessId: param.businessId,
 		userId: param.userId,
-		amount: param.amount,	
-                type: 1,
+		amount: param.amount,
+		type: 1,
 		state: 1
 	};
-	
+
 
 	var query = {
 		fields: values,
 		values: values
 	};
-	
+
 	//console.log(query);
 	billModel.create(query, function(err, rows) {
 		if (err) {
@@ -118,8 +118,8 @@ function saveBill(param, fn) {
 }
 
 
-function packageResponseData(data){
-	if(!data){
+function packageResponseData(data) {
+	if (!data) {
 		var resData = {};
 	}
 	var resData = {
@@ -132,42 +132,52 @@ function packageResponseData(data){
 		addres: data.addres,
 		mobile: data.mobile,
 		businessName: data.businessName,
-		amount:data.amount
+		amount: data.amount
 	};
 	return resData;
 }
-	
 
-function sendData(param,fn){
-		try{
-			var socket = socketUtil.findSocket(param);
-			var resData = packageResponseData(param);
-			var str = JSON.stringify(resData);
-			var buf = new Buffer(str,'utf8');
-			socket.write(buf);
-		}catch(e){
-			fn(e);
+
+function sendData(param, fn) {
+	var socket = socketUtil.findSocket(param);
+	var resData = packageResponseData(param);
+	var str = JSON.stringify(resData);
+	var buf = new Buffer(str, 'utf8');
+	socket.write(buf);
+	socket.on('data', function(data) {
+		var json = JSON.parse(data);
+		var operation = json.operation;
+		if (operation == 1) {
+			var status = json.status;
+			if (!status) {
+				fn({
+					code: errorCode.BILLING_FAILED,
+					msg: ' billing failed'
+				});
+			} else {
+				var resData = {};
+				fn(null, resData);
+			}
 		}
+	})
+
 }
 
 // just a test
 function processRequest(param, fn) {
-		if (!validate(param)) {
-			var msg = 'invalid input data';
-			console.error(moduleName + ': ' + msg);
-			fn({
-				code: errorCode.PARAM_INVALID,
-				msg: msg
-			});
-		}
+	if (!validate(param)) {
+		var msg = 'invalid input data';
+		console.error(moduleName + ': ' + msg);
+		fn({
+			code: errorCode.PARAM_INVALID,
+			msg: msg
+		});
+	}
 
 	var billId = dataHelper.createBillId();
 	param.id = billId;
-
+	/*
 	sendData(param);
-
-
-
 	//save bill
 	saveBill(param,function(err,rows){
 
@@ -178,17 +188,29 @@ function processRequest(param, fn) {
 			var resData = packageResponseData(param);
 			fn(null,resData);
 		}
-	
-
 });
-	
+*/
 
+	async.series([
 
-
-
+		function(next) {
+			saveBill(param, next);
+		},
+		function(next) {
+			sendData(param, next);
+		}
+	], function(err, result) {
+		if (err) {
+			var msg = err.msg || err;
+			fn(err);
+		} else {
+			var resData = {};
+			fn(null, resData);
+		}
+	});
 }
 
-router.post(URLPATH,function(req,res,next){
+router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
 	logicHelper.responseHttp({
 		res: res,
