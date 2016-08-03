@@ -146,19 +146,16 @@ function processRequest(param, fn) {
 				checkUserState(param, next);
 			},
 			function(next) {
-//console.log(param);
+
 				selectUserInfo(param, next);
 			}
 		],
 		function(err, result) {
-//console.log(result);
-
 			if(err){
 				console.error(' failed to select user info '+param.id);
 				fn(err);
 			}else{
 				var resData = packageResponseData(result[1]);
-//console.log(result[1]);
 				fn(null,resData);
 			}
 		});

@@ -10,6 +10,8 @@ var express = require('express');
 var router = express.Router();
 var upload = multerUtil.single('portrait');
 var async = require('async');
+var fs = require('fs');
+
 
 var debug = require('debug')(moduleName);
 var userModel = require('../../model/user_info');
@@ -63,6 +65,34 @@ function savePortrait(param, fn) {
 }
 
 
+function queryOldPortrait(param,fn){
+	var select = {
+		portrait: '1'	
+	};
+	var match = {
+		id: param.userId
+	};
+	var query = {
+		select: select,
+		match: match
+	
+	};
+
+	debug(' query user old portrait '+ moduleName);
+	
+	userModel.lookup(query,function(err,rows){
+		if(err){
+			var msg = err.msg || err;
+			console.error(' query portrait failed ' +param.userId);
+			fn(err);
+		}else{
+			fn(null,rows[0]);	
+		}		
+	});
+}
+
+
+
 
 function processRequest(param, fn) {
 	var req = param.req;
@@ -79,19 +109,37 @@ function processRequest(param, fn) {
 			var param = req.body;
 			var file = req.file;
 			var filename = file.filename;
-			var path = file.path;
 			param.portrait = filename;
-	console.log(req.file);
-	console.log(param);
-			
-			savePortrait(param,function(err,rows){
+			async.waterfall([
+				function(next){
+				queryOldPortrait(param,function(err,rows){
+					next(err,rows);
+				});
+				},function(result,next){
+					var filename = result.portrait;
+					if(filename){
+						var path = 'uploads/user/portrait/'+filename;
+						fs.unlink(path,function(err){
+						next(err,{});				
+					});}else{
+						next(null,{});	
+						}
+						
+				},function(result,next){
+				savePortrait(param,function(err,rows){
+					next(err,rows);		
+				});
+				}
+				],function(err,result){
 				if(err){
 					fn(err);
 				}else{
+					var path = 'user/portrait/'+filename; 
 					var resData ={ portraitURL: path};
 					fn(null,resData);
 				}
 			});
+
 		}
 
 	});
@@ -100,12 +148,10 @@ function processRequest(param, fn) {
 
 
 router.post(URLPATH, function(req, res, next) {
-//console.log(req);
 		var param = {
 			req:req,
 			res:res
-		};
-	console.log(req.body);
+		};	
 		logicHelper.responseHttp({
 			res: res,
 			req: req,
@@ -118,10 +164,5 @@ router.post(URLPATH, function(req, res, next) {
 
 	}
 );
-/*
-router.post(URLPATH,upload, function(req, res, next) {
-	console.log(req);
-}
-);
-*/
+
 module.exports.router = router;

@@ -160,7 +160,8 @@ var api_bill = require('./logic/bill/bill_api.logic');
 app.use(api_bill.router);
 ///////////////////////////////////////////////
 //static path
-app.use(express.static(__dirname + '/files'));
+app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/uploads'));
 
 // front static server
 // Mount front API //////////////////////////////////////////////
