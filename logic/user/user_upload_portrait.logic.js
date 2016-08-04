@@ -120,7 +120,7 @@ function processRequest(param, fn) {
 					if(filename){
 						var path = 'uploads/user/portrait/'+filename;
 						fs.unlink(path,function(err){
-						next(err,{});				
+						next(null,{});				
 					});}else{
 						next(null,{});	
 						}

@@ -16,7 +16,8 @@ var refModel = {
     businessId : 'businessId',
     amount : 'amount',
     type : 0,//default complete bill
-    content : 'content', 
+    rate :0.17, 
+    content : 0, 
     createTime : new Date(),
     updateTime : new Date(),
     state : 0 //0-valid 1-iivalid 2-deleted

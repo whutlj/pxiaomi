@@ -70,6 +70,14 @@ var refModel = {
 	businessName: {
 		data: 'businessName',
 		rangeCheck: null
+	},
+	content:{
+		data: 0,
+		rangeCheck: null
+	},
+	rate:{
+		data: 0.17,
+		rangeCheck: null	
 	}
 };
 
@@ -95,6 +103,8 @@ function saveBill(param, fn) {
 		businessId: param.businessId,
 		userId: param.userId,
 		amount: param.amount,
+		content: param.content,
+		rate: param.rate,
 		type: 1,
 		state: 1
 	};
@@ -132,36 +142,131 @@ function packageResponseData(data) {
 		addres: data.addres,
 		mobile: data.mobile,
 		businessName: data.businessName,
-		amount: data.amount
+		amount: data.amount,
+		content: data.content,
+		rate: data.rate
 	};
 	return resData;
 }
 
 
 function sendData(param, fn) {
+
+try{
 	var socket = socketUtil.findSocket(param);
 	var resData = packageResponseData(param);
 	var str = JSON.stringify(resData);
 	var buf = new Buffer(str, 'utf8');
 	socket.write(buf);
 	socket.on('data', function(data) {
+		
 		var json = JSON.parse(data);
 		var operation = json.operation;
+		var billId = json.billId;
+		console.log(json);
 		if (operation == 1) {
 			var status = json.status;
-			if (!status) {
-				fn({
+			if (status!=0) {
+				deleteFailBill(billId,function(err,rows){
+				if(err){
+					var msg = err.msg || err;			
+					console.error(' detele invaild bill fail '+msg);		
+					fn(err);
+				}else{
+					fn({
 					code: errorCode.BILLING_FAILED,
 					msg: ' billing failed'
 				});
+				}
+			});
+				
 			} else {
-				var resData = {};
-				fn(null, resData);
+				validBill(billId,function(err,rows){
+					if(err){
+						var msg = err.msg || err;					
+						console.error(' valid the bill fail '+ msg);
+						fn(err);
+					}else{
+						var resData = {};
+						fn(null, resData);
+					}
+
+				});
+				
 			}
 		}
-	})
+		
+	});
+
+}catch(e){
+		var billId =param.id;
+		deleteFailBill(billId,function(err,rows){
+				if(err){
+					var msg = err.msg || err;			
+					console.error(' detele invaild bill fail '+msg);		
+					fn(err);
+				}else{
+					var msg = e.toString();
+				fn({code : errorCode.SOCKET_CONNECTION_ERROR,msg:msg});
+				}
+	});
+			
+	}
 
 }
+
+
+function validBill(data,fn){
+	var update = {
+		state: 0,
+		updateTime: new Date()
+	};
+
+	var match = {
+		id: data
+	};
+	var query = {
+		update: update,
+		match: match
+	};
+
+	debug(' update the bill state valid' + moduleName);
+	
+	billModel.update(query,function(err,rows){
+		if(err){
+			var msg = err.msg || err;
+			console.error(' update bill state failed ' + data);
+			fn(err);		
+		}else{
+			var resData = {};
+			fn(null,resData)	
+		}
+	});
+}
+
+
+function deleteFailBill(data,fn){
+		var match = {
+			id: data
+		};
+		
+		var query = {
+			match: match
+		};	
+	debug(' delete the transfer failed bill '+  moduleName);
+	billModel.remove(query,function(err,rows){
+			if(err){
+			var msg = err.msg || err;
+			console.error(' delete the invalid bill failed ' + data);
+			fn(err);
+			}else{
+				var resData = {};
+				fn(null,resData);				
+			}
+
+		});
+}
+
 
 // just a test
 function processRequest(param, fn) {
@@ -190,9 +295,7 @@ function processRequest(param, fn) {
 		}
 });
 */
-
 	async.series([
-
 		function(next) {
 			saveBill(param, next);
 		},

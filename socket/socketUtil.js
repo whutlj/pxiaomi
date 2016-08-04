@@ -22,6 +22,7 @@ function spliceSocket(socket){
 			clients.splice(socket,1);	
 		}
 	}
+	console.log(clients.length);
 }
 
 module.exports.pushSocket = pushSocket;

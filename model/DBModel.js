@@ -213,7 +213,6 @@ function create(query, fn) {
     var timeout = query.timeout || TIMEOUT;
 
 
-console.log(values);
     if (!Array.isArray(values)) {
         values = [values];
     }
@@ -224,11 +223,10 @@ console.log(values);
         value.createTime = value.createTime || new Date();
         value.updateTime = value.updateTime || new Date();
     }
-console.log(values);
     expect.state = values[0].state;
     expect.createTime = values[0].createTime;
     expect.updateTime = values[0].createTime;
-console.log(values);
+
 
     // 1.
     // Validate input
@@ -266,8 +264,7 @@ console.log(values);
                 msg: err
             });
         }
-		//console.log(fields);
-		//console.log(values);
+		
 
         // 2.1
         // Construct SQL string       
