@@ -6,9 +6,7 @@ var URLPATH = '/v1/bill/showBills';
 var express = require('express');
 var router = express();
 var debug = require('debug')(moduleName);
-var async = require('async');
 
-var dataHelper = require('../../common/dataHelper');
 var logicHelper = require('../../common/logic_helper');
 var errorCode = require('../../common/errorCode');
 
@@ -44,7 +42,8 @@ function queryBillInfo(param,fn){
 	' from tb_bill_info as b '+
 	'inner join tb_tax_info as t on b.taxId=t.id '+
 	'and b.userId = '+ userId +
-	' inner join tb_business_info as bs on  b.businessId=bs.id';
+	'and b.state = 0'+
+	' inner join tb_business_info as bs on  b.businessId=bs.id;';
 	param.sqlstr = sqlstr;
 	billModel.query(param,function(err,rows){
 		if (err) {
@@ -52,7 +51,7 @@ function queryBillInfo(param,fn){
 			console.error('Failed to query all bill !' + msg);
 			fn(err);
 		} else {
-			console.log(rows);
+			console.log(rows.length);
 			fn(null, rows);
 		}
 
@@ -90,7 +89,7 @@ function processRequest(param, fn) {
 //post interface
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
-	logic_helper.responseHttp({
+	logicHelper.responseHttp({
 		res: res,
 		req: req,
 		next: next,
@@ -102,8 +101,8 @@ router.post(URLPATH, function(req, res, next) {
 });
 
 router.get(URLPATH, function(req, res, next) {
-	var param = req.body;
-	logic_helper.responseHttp({
+	var param = req.query;
+	logicHelper.responseHttp({
 		res: res,
 		req: req,
 		next: next,

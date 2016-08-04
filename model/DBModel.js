@@ -587,6 +587,7 @@ function count(query, fn) {
         sqlstr += ca.join(' and ');
         sqlstr += ';';
 
+	console.log(sqlstr);
         debug(model_name + ' count for: ' + sqlstr);
 
         // Use the connection
