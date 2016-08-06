@@ -21,6 +21,7 @@ var server = net.createServer(function(socket){
 			};
 			var socketClient = new SocketClient(clientSocket);
 			socketUtil.pushSocket(socketClient);
+			socket.write('connect success!');
 			}
 		}catch(e){
 			socket.write(e.toString());			

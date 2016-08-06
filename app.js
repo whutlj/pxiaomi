@@ -176,4 +176,6 @@ app.use(function(req, res){
 });
 
 app.listen(port);
+
+console.log('dmtec pxiaomi socket server listening on '+socketPort);
 console.log('dmtec pxiaomi http server listening on '+port);

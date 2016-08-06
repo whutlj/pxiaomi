@@ -26,7 +26,7 @@ var storage = multer.diskStorage({
   },
   filename: function(req,file,callback){
 	//console.log(file);
-  		var originalname = file.originalname;
+  	var originalname = file.originalname;
       var fieldname = file.fieldname;
       var random = dataHelper.createId();
       var rename = fieldname+'.'+random+'.'+originalname;

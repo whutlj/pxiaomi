@@ -157,6 +157,7 @@ function sendData(param, fn) {
 		var resData = packageResponseData(param);
 		var str = JSON.stringify(resData);
 		var buf = new Buffer(str, 'utf8');
+	var billId = param.id;
 		socket.write(buf);
 		socket.on('data', function(data) {
 
