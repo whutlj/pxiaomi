@@ -9,6 +9,9 @@ var router = express.Router();
 var AliDaYu = require('alidayu-node');
 var async = require('async');
 
+//alidayu
+TopClient = require('../../alidayu/topClient').TopClient;
+
 var errorCode = require('../../common/errorCode');
 var dataHelper = require('../../common/dataHelper');
 var logicHelper = require('../../common/logic_helper');
@@ -118,27 +121,35 @@ function updateSmsCode(param, fn) {
 function sendMessage(param,fn){
 	var mobile = param.mobile;
 	var smsCode = param.smsCode;
-	var alidayu = new AliDaYu('23432071','d3602a7f07993e5dea031b142393774a');
-		alidayu.smsSend({
-		sms_type:"normal",
-		sms_free_sign_name:"票小秘",
-		rec_num:mobile,	
-		sms_param:{
-			smsCode:smsCode
-		},	
-		sms_template_code:"SMS_13016870"
-		
-	},function(err,result){
-		if(err){
-			var msg = ' SMSCode send failed ' + err;
-			console.log(err);
-			console.error(msg);
-			fn({code: errorCode.SMSCODE_SEND_FAILED,msg:msg});
-		}else{
-			var resData ={};
-			fn(null,resData);
-		}
-	} );
+	var client = new TopClient({
+                            'appkey':'23432071',
+                            'appsecret':'d3602a7f07993e5dea031b142393774a',
+                            'REST_URL':'http://gw.api.taobao.com/router/rest'});
+
+client.execute('alibaba.aliqin.fc.sms.num.send',
+              {
+                  'sms_type':'normal',
+                  'sms_free_sign_name':'票小秘',
+                  'sms_param':{
+                  		"smsCode": smsCode
+              		},
+              	   'rec_num': mobile,
+              	   'sms_template_code':"SMS_13016870"
+              },
+              function (err,result) {
+                  if(err){
+                  	console.log(err);
+                  	console.log(err.msg);
+                  	var msg = ' send message error';
+                  	console.error(msg + ' : '+err.msg);
+                  	fn({code: errorCode.SMSCODE_SEND_FAILED,msg:msg});
+                  }
+                  else{
+                    console.log(result);
+                    var resData = {};
+                    fn(null,resData);
+                }
+              });
 }
 
 
