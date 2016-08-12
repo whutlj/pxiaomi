@@ -51,13 +51,13 @@ function deleteBusiness(param, fn) {
 		match: match,
 		update: update
 	};
-	businessModel.update(query,function(err,rows){
-		if(err){
+	businessModel.update(query, function(err, rows) {
+		if (err) {
 			var msg = err.msg || err;
 			console.log(' failed to update the business state ' + businessId);
 			fn(err);
-		}else{
-			fn(null,rows);
+		} else {
+			fn(null, rows);
 		}
 	});
 }
@@ -80,8 +80,8 @@ function processRequest(param, fn) {
 	}
 
 	var businessId = param.businessId;
-	
-	
+
+
 	debug(' try to delete the business ' + businessId);
 
 	deleteBusiness(param, function(err, rows) {

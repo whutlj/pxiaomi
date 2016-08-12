@@ -10,12 +10,12 @@ var DBModel = require('./DBModel');
 
 // reference model
 var refModel = {
-    id : 'id',
-    mobile : 'mobile',
-    smsCode : 'smsCode',
-    createTime : new Date(),
-    updateTime : new Date(),
-    state : 0 //0-valid 1-iivalid 2-deleted
+    id: 'id',
+    mobile: 'mobile',
+    smsCode: 'smsCode',
+    createTime: new Date(),
+    updateTime: new Date(),
+    state: 0 //0-valid 1-iivalid 2-deleted
 };
 
 var dbModel = new DBModel({

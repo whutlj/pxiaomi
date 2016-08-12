@@ -73,7 +73,7 @@ function updateTax(param, fn) {
 		match: match,
 		update: update
 	};
-console.log(query);
+	console.log(query);
 	taxModel.update(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
@@ -91,9 +91,9 @@ function packageResponseData(data) {
 }
 
 function processRequest(param, fn) {
-	if (!validate(param)){
+	if (!validate(param)) {
 		var msg = 'invalid input data';
-		console.error(moduleName + ' : '+ msg);
+		console.error(moduleName + ' : ' + msg);
 		fn({
 			code: errorCode.PARAM_INVALID,
 			msg: msg
@@ -102,16 +102,16 @@ function processRequest(param, fn) {
 
 	var taxId = param.taxId;
 
-	debug( ' try to update the taxInfo' + param.taxId);
+	debug(' try to update the taxInfo' + param.taxId);
 
-	updateTax(param,function(err,rows){
-		if(err){
+	updateTax(param, function(err, rows) {
+		if (err) {
 			var msg = err.msg || err;
-			console.error(' failed to update the tax ' +  taxId);
+			console.error(' failed to update the tax ' + taxId);
 			fn(err);
-		}else{
-		 var resData = packageResponseData(rows);
-		 fn(null,resData);
+		} else {
+			var resData = packageResponseData(rows);
+			fn(null, resData);
 		}
 	});
 }
@@ -146,4 +146,3 @@ router.get(URLPATH, function(req, res, next) {
 
 
 module.exports.router = router;
-

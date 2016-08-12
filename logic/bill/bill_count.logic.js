@@ -38,7 +38,7 @@ function validate(data) {
 }
 
 
-function queryCount(param,fn){
+function queryCount(param, fn) {
 	var match = {
 		userId: param.userId,
 		type: param.type,
@@ -46,60 +46,59 @@ function queryCount(param,fn){
 	};
 	var query = {
 		match: match
-	};	
+	};
 
 	debug(' query  bill count ' + param.userId);
 
-	billModel.count(query,function(err,rows){
-			if (err) {
+	billModel.count(query, function(err, rows) {
+		if (err) {
 			var msg = err.msg || err;
 			console.error('Failed to query bill count!' + msg);
 			fn(err);
-			} else {
+		} else {
 			fn(null, rows);
-			}
-		});
+		}
+	});
 }
 
 
-function queryMoney(param,fn){
+function queryMoney(param, fn) {
 	var userId = param.userId;
 	var type = param.type;
 	var state = 0;
-	
-	var sqlstr = 'select sum(amount) as money from tb_bill_info where userId = '+userId
-		     +' and type = '+type+' and state = '+ state +';';
-	
-	var query ={
+
+	var sqlstr = 'select sum(amount) as money from tb_bill_info where userId = ' + userId + ' and type = ' + type + ' and state = ' + state + ';';
+
+	var query = {
 		sqlstr: sqlstr
 	};
 	debug(' query  bill money ' + param.userId);
 
-	billModel.query(query,function(err,rows){
-			if (err) {
+	billModel.query(query, function(err, rows) {
+		if (err) {
 			var msg = err.msg || err;
 			console.error('Failed to query bill money!' + msg);
 			fn(err);
-			} else {
+		} else {
 			fn(null, rows[0]);
-			}
-		});
+		}
+	});
 }
 
 
-function packageResponseData(data){
-	
-	if(!data){
-		var resData = {};	
-		return resData;	
+function packageResponseData(data) {
+
+	if (!data) {
+		var resData = {};
+		return resData;
 	}
 	var simpleMoney = data[1].money;
-	var complexMoney= data[3].money
-	if(!simpleMoney){
-	simpleMoney = 0;  	
+	var complexMoney = data[3].money
+	if (!simpleMoney) {
+		simpleMoney = 0;
 	}
-	if(!complexMoney){
-	complexMoney = 0;  	
+	if (!complexMoney) {
+		complexMoney = 0;
 	}
 	var resData = {
 		simple: data[0],
@@ -107,12 +106,12 @@ function packageResponseData(data){
 		complex: data[2],
 		complexMoney: complexMoney
 	};
-	
+
 	return resData;
 
 }
 
-function processRequest(param,fn){
+function processRequest(param, fn) {
 	if (!validate(param)) {
 		var msg = 'invalid input data';
 		console.error(moduleName + ': ' + msg);
@@ -123,33 +122,36 @@ function processRequest(param,fn){
 	}
 
 	debug(' try to count the user bill info' + moduleName);
-	
-		async.parallel([
-			function(next){
-				param.type = 0;
-				queryCount(param,next);				
-			},function(next){
-				param.type = 0;
-				queryMoney(param,next);
-			},
-			function(next){
-				param.type = 1;
-				queryCount(param,next);				
-			},function(next){
-				param.type = 1;
-				queryMoney(param,next);
-			}
-		],function(err,result){
-			if (err) {
-				console.error('Failed to count the  bill info!' + moduleName);
-				fn(err);
-			} else {
-				debug('Success to count the  bill info'+ moduleName );
 
-				var resData = packageResponseData(result);
-				fn(null, resData);
-			}
-		});
+	async.parallel([
+
+		function(next) {
+			param.type = 0;
+			queryCount(param, next);
+		},
+		function(next) {
+			param.type = 0;
+			queryMoney(param, next);
+		},
+		function(next) {
+			param.type = 1;
+			queryCount(param, next);
+		},
+		function(next) {
+			param.type = 1;
+			queryMoney(param, next);
+		}
+	], function(err, result) {
+		if (err) {
+			console.error('Failed to count the  bill info!' + moduleName);
+			fn(err);
+		} else {
+			debug('Success to count the  bill info' + moduleName);
+
+			var resData = packageResponseData(result);
+			fn(null, resData);
+		}
+	});
 }
 
 
@@ -183,4 +185,3 @@ router.post(URLPATH, function(req, res, next) {
 });
 
 module.exports.router = router;
-

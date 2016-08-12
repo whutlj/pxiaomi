@@ -73,7 +73,7 @@ function createTax(param, fn) {
 		address: param.address,
 		mobile: param.mobile
 	};
-//console.log(values);
+	//console.log(values);
 
 	var query = {
 		fields: values,
@@ -98,7 +98,7 @@ function packageResponseData(data) {
 }
 
 function processRequest(param, fn) {
-	
+
 	if (!validate(param)) {
 		var msg = 'invalid input data';
 		console.error(moduleName + ' : ' + msg);

@@ -163,13 +163,13 @@ function lookup(query, fn) {
                 var date = moment(match[k]).format('YYYY-MM-DD HH:mm:ss');
                 ca.push('' + k + '=' + '\'' + date + '\'');
             } else {
-                ca.push('' + k + '=' + (typeof match[k]=== 'string'  ?'"'+match[k]+'"':match[k]));
+                ca.push('' + k + '=' + (typeof match[k] === 'string' ? '"' + match[k] + '"' : match[k]));
             }
         });
         sqlstr += ca.join(' and ');
         sqlstr += ';';
-	
-	console.log(sqlstr);
+
+        console.log(sqlstr);
 
         debug(model_name + ' lookup for ' + sqlstr);
 
@@ -264,7 +264,7 @@ function create(query, fn) {
                 msg: err
             });
         }
-		
+
 
         // 2.1
         // Construct SQL string       
@@ -273,8 +273,8 @@ function create(query, fn) {
 
         // fields part
         sqlstr += ' (' + Object.keys(fields).join(',') + ') ';
-	
-	
+
+
         // values part
         var va = [];
         values.forEach(function(v) {
@@ -297,8 +297,8 @@ function create(query, fn) {
         sqlstr += va.join(',');
         sqlstr += ';';
 
-	console.log(sqlstr);
-	
+        console.log(sqlstr);
+
         debug(table_name + ' create sql: ' + sqlstr);
 
         // Use the connection
@@ -410,7 +410,7 @@ function update(query, fn) {
         sqlstr += ca.join(' and ');
         sqlstr += ';';
 
-	console.log(sqlstr);	
+        console.log(sqlstr);
 
         debug('update: ' + sqlstr);
 
@@ -496,7 +496,7 @@ function remove(query, fn) {
         sqlstr += ca.join(' and ');
         sqlstr += ';';
 
-console.log(sqlstr);
+        console.log(sqlstr);
 
         // Use the connection
         connection.query({
@@ -587,7 +587,7 @@ function count(query, fn) {
         sqlstr += ca.join(' and ');
         sqlstr += ';';
 
-	console.log(sqlstr);
+        console.log(sqlstr);
         debug(model_name + ' count for: ' + sqlstr);
 
         // Use the connection
@@ -628,7 +628,7 @@ function query(param, fn) {
     var sqlstr = param.sqlstr || param.sqlStr || param;
 
 
-   console.log(sqlstr);
+    console.log(sqlstr);
 
     debug(model_name + ' calling Database query');
 
@@ -673,6 +673,3 @@ function query(param, fn) {
         });
     });
 }
-
-
-

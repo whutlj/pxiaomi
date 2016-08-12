@@ -91,13 +91,13 @@ function validatePas(data, fn) {
 				msg: msg
 			});
 		} else {
-				var rows = {
-				password : newPassword
-				};
-				console.log(rows);
-				fn(null,rows);
-			}
+			var rows = {
+				password: newPassword
+			};
+			console.log(rows);
+			fn(null, rows);
 		}
+	}
 
 }
 
@@ -133,7 +133,7 @@ function updateUserPas(param, fn) {
 }
 
 
-function processRequest(param, fn){
+function processRequest(param, fn) {
 	if (!validate(param)) {
 		var msg = ' invalid input data';
 		console.error(moduleName + ' : ' + msg);
@@ -148,40 +148,39 @@ function processRequest(param, fn){
 
 	async.waterfall([
 
-			function(next) {
-				queryPassword(param, function(err, rows) {
-					next(err, rows);
-				});
-			},
-			function(result, next) {
-console.log(result);
-				var data = {};
-				data.oldPassword = result.password;
-				data.inputPassword = param.password;
-				data.newPassword = param.newPassword;
-				validatePas(data, function(err, rows) {
-					next(err, rows);
-				});
-			},
-			function(result, next) {
-				updateUserPas(param, function(err, rows) {
-					next(err, rows);
-				});
-			}
-		], function(err, result) {
-			if (err) {
-				console.error(' failed to update password ' + param.userId);
-				fn(err);
-			} else {
-				debug('success to udpate the password');
-				var resData = {};
-				fn(null, resData);
-			}
+		function(next) {
+			queryPassword(param, function(err, rows) {
+				next(err, rows);
+			});
+		},
+		function(result, next) {
+			console.log(result);
+			var data = {};
+			data.oldPassword = result.password;
+			data.inputPassword = param.password;
+			data.newPassword = param.newPassword;
+			validatePas(data, function(err, rows) {
+				next(err, rows);
+			});
+		},
+		function(result, next) {
+			updateUserPas(param, function(err, rows) {
+				next(err, rows);
+			});
 		}
-	);
+	], function(err, result) {
+		if (err) {
+			console.error(' failed to update password ' + param.userId);
+			fn(err);
+		} else {
+			debug('success to udpate the password');
+			var resData = {};
+			fn(null, resData);
+		}
+	});
 }
 
-router.post(URLPATH,function(req,res,next){
+router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
 	logicHelper.responseHttp({
 		res: res,
@@ -194,7 +193,7 @@ router.post(URLPATH,function(req,res,next){
 	});
 });
 
-router.get(URLPATH,function(req,res,next){
+router.get(URLPATH, function(req, res, next) {
 	var param = req.query;
 	logicHelper.responseHttp({
 		res: res,

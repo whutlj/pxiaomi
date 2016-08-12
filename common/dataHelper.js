@@ -34,29 +34,33 @@ function createSha1Data(inputs) {
 
 
 
-
 function createUserId(options) {
 	var userId = options.mobile || createId();
 	return userId;
 }
 
 
-function createTaxId(options){
+function createTaxId(options) {
 	var taxId = createId();
 	return taxId;
 }
 
-function createBusinessId(options){
+function createBusinessId(options) {
 	var businessId = createId();
 	return businessId;
 }
 
 
-function createBillId(options){
+function createBillId(options) {
 	var billId = createId();
 	return billId;
 }
 
+
+function createSmsCodeId(options) {
+	var smsCodeId = options.mobile || createId();
+	return smsCodeId;
+}
 /*
 function createUserTokenId(options) {
 	var userId = options.userId;
@@ -124,7 +128,6 @@ function createId(data) {
 
 
 
-
 function createSMSCode() {
 	var buf = crypto.randomBytes(32);
 	var smscode = '';
@@ -165,3 +168,4 @@ module.exports.createId = createId;
 module.exports.createSMSCode = createSMSCode;
 module.exports.createParentPath = createParentPath;
 module.exports.createBillId = createBillId;
+module.exports.createSmsCodeId = createSmsCodeId;

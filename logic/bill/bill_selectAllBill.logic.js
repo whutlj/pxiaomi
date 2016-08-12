@@ -35,17 +35,16 @@ function validate(data) {
 
 
 
-
-function queryBillInfo(param,fn){
+function queryBillInfo(param, fn) {
 	var userId = param.userId;
-	var sqlstr = 'select b.id billId,b.amount,b.content,b.rate,b.type,t.title,t.taxNo,t.bankDeposit,t.accountNo,t.address,t.mobile,bs.name businessName'+
-	' from tb_bill_info as b '+
-	'inner join tb_tax_info as t on b.taxId=t.id '+
-	'and b.userId = '+ userId +
-	'and b.state = 0'+
-	' inner join tb_business_info as bs on  b.businessId=bs.id;';
+	var sqlstr = 'select b.id billId,b.amount,b.content,b.rate,b.type,t.title,t.taxNo,t.bankDeposit,t.accountNo,t.address,t.mobile,bs.name businessName' +
+		' from tb_bill_info as b ' +
+		'inner join tb_tax_info as t on b.taxId=t.id ' +
+		'and b.userId = ' + userId +
+		'and b.state = 0' +
+		' inner join tb_business_info as bs on  b.businessId=bs.id;';
 	param.sqlstr = sqlstr;
-	billModel.query(param,function(err,rows){
+	billModel.query(param, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
 			console.error('Failed to query all bill !' + msg);
@@ -73,14 +72,14 @@ function processRequest(param, fn) {
 
 	debug(' try to select all bill ' + moduleName);
 
-	queryBillInfo(param,function(err,rows){
+	queryBillInfo(param, function(err, rows) {
 		if (err) {
-				console.error('Failed to query all bill!' + moduleName);
-				fn(err);
-			} else {
-				debug('Success to query all bill'+ moduleName );
-				fn(null, rows);
-			}
+			console.error('Failed to query all bill!' + moduleName);
+			fn(err);
+		} else {
+			debug('Success to query all bill' + moduleName);
+			fn(null, rows);
+		}
 	});
 
 }

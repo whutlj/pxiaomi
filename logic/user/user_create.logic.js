@@ -22,8 +22,8 @@ var dataHelper = require('../../common/dataHelper');
 
 var refModel = {
 	mobile: {
-		data :'',
-		rangeCheck : null
+		data: '',
+		rangeCheck: null
 	},
 	userName: {
 		data: '',
@@ -49,7 +49,7 @@ var refModel = {
 
 
 function validate(data) {
-   
+
 	if (!data) {
 		return false;
 	}
@@ -126,16 +126,16 @@ function createUser(param, fn) {
 	//create id by crpyto module
 	values.id = dataHelper.createId(values.name);
    */
-   var mobile = param.mobile;
-   var userName = param.userName;
-   var password = param.password;
-   var userId = param.userId;
-   var values = {
-   		id : userId,
-   		password : password,
-   		name : userName,
-   		mobile : mobile
-   };
+	var mobile = param.mobile;
+	var userName = param.userName;
+	var password = param.password;
+	var userId = param.userId;
+	var values = {
+		id: userId,
+		password: password,
+		name: userName,
+		mobile: mobile
+	};
 
 	var query = {
 		fields: values,
@@ -170,6 +170,7 @@ function processRequest(param, fn) {
 	debug('Try to create the user:' + userId);
 
 	async.series([
+
 			function(next) {
 				//1. check whether user is duplicated!
 				checkUserExist(param, next);
@@ -179,7 +180,7 @@ function processRequest(param, fn) {
 				createUser(param, next);
 			}
 		],
-		function(err,result) {
+		function(err, result) {
 			if (err) {
 				console.error('Failed to insert new user!' + userName);
 				fn(err);

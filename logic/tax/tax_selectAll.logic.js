@@ -15,9 +15,9 @@ var errorCode = require('../../common/errorCode');
 var taxModel = require('../../model/tax_info');
 
 var refModel = {
-	userId : {
-		data : 'userId',
-		rangeCheck : null
+	userId: {
+		data: 'userId',
+		rangeCheck: null
 	}
 };
 
@@ -35,51 +35,51 @@ function validate(data) {
 }
 
 
-function selectAllTax(param,fn){
+function selectAllTax(param, fn) {
 	var userId = param.userId;
-	
+
 	var select = {
-		id : 'id',
-		title : 'title',
-		taxNo : 'taxNo',
-		bankDeposit : 'bankDeposit',
-		accountNo : 'accountNo',
-		address : 'address',
-		mobile : 'mobile'
+		id: 'id',
+		title: 'title',
+		taxNo: 'taxNo',
+		bankDeposit: 'bankDeposit',
+		accountNo: 'accountNo',
+		address: 'address',
+		mobile: 'mobile'
 	};
- 	
-	var match ={
-		userId : userId,
-		state : 0
+
+	var match = {
+		userId: userId,
+		state: 0
 	};
 
 	var query = {
-		select :select,
-		match : match
+		select: select,
+		match: match
 	};
-	taxModel.lookup(query,function(err,rows){
-		if(err){
+	taxModel.lookup(query, function(err, rows) {
+		if (err) {
 			var msg = err.msg || err;
-			console.error(' failed to select all tax '+ ' : '+ msg);
+			console.error(' failed to select all tax ' + ' : ' + msg);
 			fn(err);
-		}else{
-			fn(null,rows);
+		} else {
+			fn(null, rows);
 		}
 	});
 }
 
-function packageResponseData(data){
-	if(!data){
+function packageResponseData(data) {
+	if (!data) {
 		var resData = {};
 		return resData;
-	}else{
+	} else {
 		var resData = data;
 		return resData;
 	}
 }
 
 
-function processRequest(param,fn){
+function processRequest(param, fn) {
 	if (!validate(param)) {
 		var msg = 'invalid input data';
 		console.error(moduleName + ' : ' + msg);
@@ -90,16 +90,16 @@ function processRequest(param,fn){
 	}
 
 
-	debug(' try to select all tax '+ param.userId);
+	debug(' try to select all tax ' + param.userId);
 
-	selectAllTax(param,function(err,rows){
-		if(err){
+	selectAllTax(param, function(err, rows) {
+		if (err) {
 			var msg = err.mag || err;
-			console.error( 'failed to select all tax ' + ' : '+ msg);
+			console.error('failed to select all tax ' + ' : ' + msg);
 			fn(err);
-		}else{
+		} else {
 			var resData = packageResponseData(rows);
-			fn(null,resData);
+			fn(null, resData);
 		}
 	});
 }

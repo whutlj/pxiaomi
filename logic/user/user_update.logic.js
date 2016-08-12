@@ -64,62 +64,65 @@ function validate(data) {
 }
 
 function updateUserInfo(param, fn) {
-//console.log(param);
+	//console.log(param);
 	var update = {
 		name: param.userName,
 		portrait: param.portrait,
 		age: param.age,
 		gender: param.gender,
 		email: param.email,
-		updateTime : new Date()
+		updateTime: new Date()
 	};
-//console.log(update);
-	var match ={
+	//console.log(update);
+	var match = {
 		id: param.userId
 	};
 
 	var query = {
-		update :update,
-		match :match
+		update: update,
+		match: match
 	};
-	userModel.update(query,function(err,rows){
-		if(err){
+	userModel.update(query, function(err, rows) {
+		if (err) {
 			var msg = err.msg || err;
 			console.error('failed to update the user' + msg);
 			fn(err);
-		}else{
-			fn(null,rows);
+		} else {
+			fn(null, rows);
 		}
 
 	});
 }
 
-function packageResponseData(data){
+function packageResponseData(data) {
 	var resData = {};
 	return resData;
 }
 
-function processRequest(param, fn){
-	if(!validate(param)){
+function processRequest(param, fn) {
+	if (!validate(param)) {
 
 		var msg = 'update invalid input data';
-		console.error(moduleName + ' : '+msg);
-		fn({code : errorCode.PARAM_INVALID,msg : msg});
+		console.error(moduleName + ' : ' + msg);
+		fn({
+			code: errorCode.PARAM_INVALID,
+			msg: msg
+		});
 	}
 
 	var userName = param.userName;
-   	debug('try to update the user ' + moduleName);
+	debug('try to update the user ' + moduleName);
 
-   	updateUserInfo(param,function(err,rows){
-   		if(err){
-   			console.error('failed to update the user');
-   			fn(err);
-   		}else{
-   			debug('success to update the user!'+ userName );
-   			var resData = packageResponseData(rows);
-   			fn(null,resData);
-   		}
-   	});
+	updateUserInfo(param, function(err, rows) {
+		if (err) {
+			console.error('failed to update the user');
+			fn(err);
+		} else {
+			debug('success to update the user!' + userName);
+			var resData = packageResponseData(rows);
+			fn(null, resData);
+		}
+	});
 }
 
 

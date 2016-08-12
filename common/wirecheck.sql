@@ -163,7 +163,7 @@ CREATE TABLE `tb_bill_items_info`(
   `billId` VARCHAR(45) NOT NULL COMMENT '发票ID',
   `amount` VARCHAR(45) DEFAULT NULL COMMENT '金额',
   `content` int(11) DEFAULT NULL COMMENT '内容',
-  `rate` float(6,4) DEFAULT NULL COMMENT 'rate',
+  `rate` float(6,4) DEFAULT NULL COMMENT '税率',
   `type` VARCHAR(45) DEFAULT NULL COMMENT '发票内容的类型',
   `createTime` DATETIME NOT NULL DEFAULT now() COMMENT '创建日期',
   `updateTime` DATETIME NOT NULL DEFAULT now() COMMENT 'update日期', 
@@ -176,14 +176,14 @@ SHOW WARNINGS;
 
 DROP TABLE IF EXISTS `tb_smsCode_info`;
 CREATE TABLE `tb_smsCode_info`(
-  `id` VARCHAR(45) NOT NULL COMMENT 'smsCodeID',
-  `mobile` VARCHAR(22) DEFAULT NULL COMMENT 'mobile',
-  `smsCode` VARCHAR(22) DEFAULT NULL COMMENT 'smsCode',
+  `id` VARCHAR(45) NOT NULL COMMENT '验证码ID',
+  `mobile` VARCHAR(22) DEFAULT NULL COMMENT '手机号',
+  `smsCode` VARCHAR(22) DEFAULT NULL COMMENT '验证码',
   `createTime` DATETIME NOT NULL DEFAULT now() COMMENT '创建日期',
   `updateTime` DATETIME NOT NULL DEFAULT now() COMMENT 'update日期', 
   `state` int(11) NOT NULL DEFAULT 0 COMMENT '记录状态 0:有效 1:非法 2:删除',
   PRIMARY KEY (`id`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT 'smsCode';
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '验证码表';
 
 SHOW WARNINGS;
 

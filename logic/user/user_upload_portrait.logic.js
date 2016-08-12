@@ -65,9 +65,9 @@ function savePortrait(param, fn) {
 }
 
 
-function queryOldPortrait(param,fn){
+function queryOldPortrait(param, fn) {
 	var select = {
-		portrait: '1'	
+		portrait: '1'
 	};
 	var match = {
 		id: param.userId
@@ -75,29 +75,28 @@ function queryOldPortrait(param,fn){
 	var query = {
 		select: select,
 		match: match
-	
+
 	};
 
-	debug(' query user old portrait '+ moduleName);
-	
-	userModel.lookup(query,function(err,rows){
-		if(err){
+	debug(' query user old portrait ' + moduleName);
+
+	userModel.lookup(query, function(err, rows) {
+		if (err) {
 			var msg = err.msg || err;
-			console.error(' query portrait failed ' +param.userId);
+			console.error(' query portrait failed ' + param.userId);
 			fn(err);
-		}else{
-			fn(null,rows[0]);	
-		}		
+		} else {
+			fn(null, rows[0]);
+		}
 	});
 }
-
 
 
 
 function processRequest(param, fn) {
 	var req = param.req;
 	var res = param.res;
-	upload(req,res,function(err){
+	upload(req, res, function(err) {
 		if (err) {
 			var msg = err;
 			console.error('upload error ' + msg);
@@ -111,32 +110,38 @@ function processRequest(param, fn) {
 			var filename = file.filename;
 			param.portrait = filename;
 			async.waterfall([
-				function(next){
-				queryOldPortrait(param,function(err,rows){
-					next(err,rows);
-				});
-				},function(result,next){
+
+				function(next) {
+					queryOldPortrait(param, function(err, rows) {
+						next(err, rows);
+					});
+				},
+				function(result, next) {
 					var filename = result.portrait;
-					if(filename){
-						var path = 'uploads/user/portrait/'+filename;
-						fs.unlink(path,function(err){
-						next(null,{});				
-					});}else{
-						next(null,{});	
-						}
-						
-				},function(result,next){
-				savePortrait(param,function(err,rows){
-					next(err,rows);		
-				});
+					if (filename) {
+						var path = 'uploads/user/portrait/' + filename;
+						fs.unlink(path, function(err) {
+							next(null, {});
+						});
+					} else {
+						next(null, {});
+					}
+
+				},
+				function(result, next) {
+					savePortrait(param, function(err, rows) {
+						next(err, rows);
+					});
 				}
-				],function(err,result){
-				if(err){
+			], function(err, result) {
+				if (err) {
 					fn(err);
-				}else{
-					var path = 'user/portrait/'+filename; 
-					var resData ={ portraitURL: path};
-					fn(null,resData);
+				} else {
+					var path = 'user/portrait/' + filename;
+					var resData = {
+						portraitURL: path
+					};
+					fn(null, resData);
 				}
 			});
 
@@ -148,21 +153,20 @@ function processRequest(param, fn) {
 
 
 router.post(URLPATH, function(req, res, next) {
-		var param = {
-			req:req,
-			res:res
-		};	
-		logicHelper.responseHttp({
-			res: res,
-			req: req,
-			next: next,
-			moduleName: moduleName,
-			processRequest: processRequest,
-			debug: debug,
-			param: param
-		});
+	var param = {
+		req: req,
+		res: res
+	};
+	logicHelper.responseHttp({
+		res: res,
+		req: req,
+		next: next,
+		moduleName: moduleName,
+		processRequest: processRequest,
+		debug: debug,
+		param: param
+	});
 
-	}
-);
+});
 
 module.exports.router = router;

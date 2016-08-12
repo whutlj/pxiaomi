@@ -64,9 +64,9 @@ function checkUserState(param, fn) {
 			if (logState) {
 				fn(null, rows);
 			} else {
-				
-			var msg = 'user logout need login ';
-			console.error(moduleName + msg);
+
+				var msg = 'user logout need login ';
+				console.error(moduleName + msg);
 				fn({
 					code: errorCode.USER_LOGINSTATE_EXCEPTION,
 					msg: msg
@@ -104,7 +104,7 @@ function selectUserInfo(param, fn) {
 			console.error(' select user info failed ' + msg);
 			fn(err);
 		} else {
-//console.log(rows[0]);
+			//console.log(rows[0]);
 			fn(null, rows[0]);
 			console.log(' success select user info ');
 		}
@@ -112,19 +112,19 @@ function selectUserInfo(param, fn) {
 }
 
 
-function packageResponseData(data){
-	if(!data){
+function packageResponseData(data) {
+	if (!data) {
 		return {};
-	}else{
+	} else {
 		var resData = {
-			userName : data.name,
-			portrait : data.portrait,
-			gender : data.gender,
-			age : data.age,
-			email : data.email,
-			mobile : data.mobile
+			userName: data.name,
+			portrait: data.portrait,
+			gender: data.gender,
+			age: data.age,
+			email: data.email,
+			mobile: data.mobile
 		};
-		return resData; 
+		return resData;
 	}
 }
 
@@ -139,9 +139,10 @@ function processRequest(param, fn) {
 		});
 	}
 
-        debug('try to select user info :'+ param.id);
+	debug('try to select user info :' + param.id);
 
 	async.series([
+
 			function(next) {
 				checkUserState(param, next);
 			},
@@ -151,17 +152,17 @@ function processRequest(param, fn) {
 			}
 		],
 		function(err, result) {
-			if(err){
-				console.error(' failed to select user info '+param.id);
+			if (err) {
+				console.error(' failed to select user info ' + param.id);
 				fn(err);
-			}else{
+			} else {
 				var resData = packageResponseData(result[1]);
-				fn(null,resData);
+				fn(null, resData);
 			}
 		});
 }
 
-router.post(URLPATH,function(req,res,next){
+router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
 	logicHelper.responseHttp({
 		res: res,
@@ -175,7 +176,7 @@ router.post(URLPATH,function(req,res,next){
 });
 
 
-router.get(URLPATH,function(req,res,next){	
+router.get(URLPATH, function(req, res, next) {
 	var param = req.query;
 	logicHelper.responseHttp({
 		res: res,

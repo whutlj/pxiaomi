@@ -3,10 +3,10 @@
 /*
  * history:
  * 2016.07.08, created by Andy.zhou
- *  
+ *
  */
 
- 'use strict';
+'use strict';
 var moduleName = 'user.logic';
 var debug = require('debug')(moduleName);
 
@@ -19,43 +19,42 @@ var userModel = require('../../model/user_info');
 var groupModel = require('../../model/user_group_info');
 
 //helper
-var db 				= require('../../common/db');
-var logic_helper 	= require('../../common/logic_helper');
-var wxConstants 	= require('../../common/constants');
-var errorCode 		= require('../../common/errorCode');
+var db = require('../../common/db');
+var logic_helper = require('../../common/logic_helper');
+var wxConstants = require('../../common/constants');
+var errorCode = require('../../common/errorCode');
 
 
 function checkUserExist(params, fn) {
-	var userId = params.userId || params.id ;
+	var userId = params.userId || params.id;
 	var userName = params.userName;
 	var match = {};
 
 	//set the match
 	if (userId) {
 		match.userId = userId;
-	}else {
+	} else {
 		match.userName = userName;
 	}
 
-	var select = userModel.dataModel;	
+	var select = userModel.dataModel;
 	var query = {
 		select: select,
 		match: match,
 	};
 
-	userModel.lookup(query, function(err, rows){
+	userModel.lookup(query, function(err, rows) {
 		if (err) {
 			console.error('Failed to check the user!');
 			fn(err);
-		}else {
+		} else {
 			var data = {};
 
-			if (rows.length==0)
-			{
+			if (rows.length == 0) {
 				debug('Cannot find the user, %j', match);
 				data.exist = false;
 				fn(null, data);
-			}else {
+			} else {
 				data.exist = true;
 				data.user = rows[0];
 				fn(null, data);
@@ -64,13 +63,13 @@ function checkUserExist(params, fn) {
 	});
 }
 
-function checkUserGroupExist(params, fn){
+function checkUserGroupExist(params, fn) {
 	var groupId = params.groupId || params.id;
 	var name = params.name;
 	var match = {};
 	if (groupId) {
 		match.id = groupId;
-	}else{
+	} else {
 		match.name = name;
 	}
 
@@ -79,19 +78,18 @@ function checkUserGroupExist(params, fn){
 		select: select,
 		match: match,
 	};
-	groupModel.lookup(query, function(err, rows){
+	groupModel.lookup(query, function(err, rows) {
 		if (err) {
 			console.error('Failed to check the group!');
 			fn(err);
-		}else {
+		} else {
 			var data = {};
 
-			if (rows.length==0)
-			{
+			if (rows.length == 0) {
 				debug('Cannot find the group:%j', match);
 				data.exist = false;
 				fn(null, data);
-			}else {
+			} else {
 				data.exist = true;
 				data.group = rows[0];
 				fn(null, data);

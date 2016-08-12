@@ -1,6 +1,6 @@
 'use strict';
 
-var moduleName = 'user_verifySMSCode.logic';
+var moduleName = 'password_verifySmsCode.logic';
 var URLPATH = '/v1/user/smsCode/verify';
 
 var TIMEOUT = 10 * 60 * 1000;
@@ -10,7 +10,7 @@ var express = require('express');
 var router = express.Router();
 var debug = require('debug')(moduleName);
 var async = require('async');
-
+ 
 var logicHelper = require('../../common/logic_helper');
 var errorCode = require('../../common/errorCode');
 var dataHelper = require('../../common/dataHelper');
@@ -20,7 +20,7 @@ var smsCodeModel = require('../../model/smsCode_info');
 var refModel = {
 	mobile: {
 		data: 'mobile',
-		rangeCheck: null
+		rangeCheck: null 
 	},
 	smsCode: {
 		data: 'smsCode',
@@ -42,7 +42,7 @@ function validate(data) {
 
 
 //check the user exist
-function checkUserExist(param, fn) {
+function checkUserExist(param,fn){
 	var select = {
 		id: 'id',
 		mobile: mobile
@@ -53,35 +53,32 @@ function checkUserExist(param, fn) {
 	};
 
 
-	var query = {
+	var query =  {
 		select: select,
 		match: match
 	};
 
 	debug(' check whether the user is exist ' + param.mobile);
 
-	userModel.lookup(query, function(err, rows) {
+	userModel.lookup(query,function(err,rows){
 		if (err) {
 			var msg = err.msg || err;
 			console.error('check the user exist failed' + msg);
 			fn(err);
 		} else {
-			if (rows.length) {
-				var msg = '  the user has been registered ' + param.mobile;
-				console.error(msg);
-				fn({
-					code: errorCode.SMSCODE_USER_REGISTERED,
-					msg: msg
-				});
-			} else {
+			if(rows.length){
 				var resData = {};
-				fn(null, resData);
+				fn(null,resData);
+			}else{
+				var msg = '  the user does not exist '+ param.mobile;
+				console.error(msg);
+				fn({code:errorCode.USER_NOT_EXIST,msg:msg});
 			}
 		}
 	});
 }
 
-function querySmsCodeInfo(param, fn) {
+function querySmsCodeInfo(param,fn){
 	var select = {
 		mobile: 'mobile',
 		smsCode: 'smsCode',
@@ -92,48 +89,45 @@ function querySmsCodeInfo(param, fn) {
 	};
 
 	var query = {
-		select: select,
+		select:select,
 		match: match
 	};
 
 	debug(' query relevant smsCode info ' + param.mobile);
 
-	smsCode.lookup(query, function(err, rows) {
+	smsCode.lookup(query,function(err,rows){
 		if (err) {
 			var msg = err.msg || err;
 			console.error('query the smsCode info  failed' + msg);
 			fn(err);
 		} else {
 			var resData = rows[0];
-			fn(null, resData);
+			fn(null,resData);
 		}
 	});
 }
 
-function checkTimeout(param, fn) {
+function checkTimeout(param,fn){
 	var date = new Date();
 	var updateTime = param.updateTime;
 	console.log(typeof updateTime);
-	fn(null, {});
+	fn(null,{});
 }
 
-function checkSmsCode(param, fn) {
+function checkSmsCode(param,fn){
 	var inputCode = param.inputCode;
 	var storeCode = param.storeCode;
-	if (inputCode == storeCode) {
+	if(inputCode == storeCode){
 		var resData = {};
-		fn(null, resData);
-	} else {
+		fn(null,resData);
+	}else{
 		var msg = ' the input smsCode error ';
 		console.error(msg);
-		fn({
-			code: errorCode.SMSCODE_ERROR,
-			msg: msg
-		});
+		fn({code: errorCode.SMSCODE_ERROR,msg:msg});
 	}
 }
 
-function processRequest(req, fn) {
+function processRequest(req,fn){
 	if (!validate(param)) {
 		var msg = 'invalid input data ';
 		console.error(moduleName + msg);
@@ -142,43 +136,43 @@ function processRequest(req, fn) {
 			msg: msg
 		});
 	}
-
+	
 	debug(' try to verify the user input smsCode ' + param.mobile);
 
 	async.waterfall({
-		function(next) {
-			checkUserExist(param, function(err, rows) {
-				next(err, rows);
+		function(next){
+			checkUserExist(param,function(err,rows){
+				next(err,rows);
 			});
 		},
-		function(result, next) {
-			querySmsCodeInfo(param, function(err, rows) {
-				next(err, rows);
+		function(result,next){
+			querySmsCodeInfo(param,function(err,rows){
+				next(err,rows);
 			});
 		},
-		function(result, next) {
+		function(result,next){
 			var data = {
 				inputCode: param.smsCode,
 				storeCode: result.smsCode,
 			};
-			checkSmsCode(data, function(err, rows) {
-				next(err, result);
+			checkSmsCode(data,function(err,rows){
+				next(err,result);
 			});
 		},
-		function(result, next) {
+		function(result,next){
 			param.updateTime = result.updateTime;
-			checkTimeout(param, function(err, rows) {
-				next(err, rows);
+			checkTimeout(param,function(err,rows){
+				next(err,rows);
 			});
 		}
-	}, function(err, result) {
-		if (err) {
+	},function(err,result){
+			if(err){
 			var msg = err.msg || err;
-			console.error(' user register  failed ' + msg);
+			console.error(' user verify failed ' + msg);
 			fn(err);
-		} else {
+		}else{
 			var resData = {};
-			fn(null, resData);
+			fn(null,resData);
 		}
 	});
 }
@@ -199,3 +193,4 @@ router.post(URLPATH, function(req, res, next) {
 });
 
 module.exports.router = router;
+

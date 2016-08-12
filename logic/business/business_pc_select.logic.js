@@ -43,12 +43,12 @@ function validate(data) {
 function queryBusiness(param, fn) {
 	var businessId = param.businessId;
 	var match = {
-		id : businessId,
+		id: businessId,
 		state: 0
 	};
 
 	var select = {
-		'*' : 1
+		'*': 1
 	};
 
 	var query = {
@@ -66,13 +66,13 @@ function queryBusiness(param, fn) {
 		} else {
 			var business = rows[0];
 			var state = business.state;
-			if(state == 0){
-				fn(null,business);
-			}else{
+			if (state == 0) {
+				fn(null, business);
+			} else {
 				console.error(' business state error');
 				fn({
-					code : errorCode.STATE_ERROR,
-					msg : msg
+					code: errorCode.STATE_ERROR,
+					msg: msg
 				});
 			}
 
@@ -87,7 +87,7 @@ function packageResponseData(data) {
 		return resData;
 	} else {
 		var resData = {
-			name : data.name,
+			name: data.name,
 			mobile: data.mobile,
 			telephone: data.telephone,
 			email: data.email,
@@ -115,7 +115,7 @@ function processRequest(param, fn) {
 		});
 	}
 
-	debug(' try to select the business info '+ param.businessId);
+	debug(' try to select the business info ' + param.businessId);
 
 	queryBusiness(param, function(err, rows) {
 		if (err) {

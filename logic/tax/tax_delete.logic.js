@@ -51,13 +51,13 @@ function deleteTax(param, fn) {
 		match: match,
 		update: update
 	};
-	taxModel.update(query,function(err,rows){
-		if(err){
+	taxModel.update(query, function(err, rows) {
+		if (err) {
 			var msg = err.msg || err;
 			console.log(' failed to update the tax state ' + taxId);
 			fn(err);
-		}else{
-			fn(null,rows);
+		} else {
+			fn(null, rows);
 		}
 	});
 }
@@ -80,7 +80,7 @@ function processRequest(param, fn) {
 	}
 
 	var taxId = param.taxId;
-	
+
 	//console.log(taxId);
 
 	debug(' try to delete the tax ' + taxId);

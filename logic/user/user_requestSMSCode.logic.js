@@ -7,7 +7,7 @@ var debug = require('debug')(moduleName);
 var express = require('express');
 var router = express.Router();
 var AliDaYu = require('alidayu-node');
-
+var async = require('async');
 
 var errorCode = require('../../common/errorCode');
 var dataHelper = require('../../common/dataHelper');
@@ -35,18 +35,87 @@ function validate(data) {
 	});
 }
 
-function saveSmsCode(param,fn){
-	var fields = {
+function saveSmsCode(param, fn) {
+	var values = {
 		id: param.id,
 		mobile: param.mobile,
 		smsCode: param.smsCode
 	};
-	var values = {}
+	var query = {
+		fields: values,
+		values: values
+	};
 
+
+	debug(' try to save the smsCode ' + param.mobile);
+
+	smsCode.create(query, function(err, rows) {
+		if (err) {
+			var msg = err.msg || err;
+			console.error('save the smsCode failed' + msg);
+			fn(err);
+		} else {
+			var resData = {};
+			fn(null, resData);
+		}
+	});
 }
 
 
-function processRequest(param,fn){
+function checkExitMobile(param, fn) {
+	var select = {
+		id: 'id',
+		mobile: 'mobile'
+	};
+
+	var match = {
+		mobile: param.mobile
+	};
+
+	var query = {
+		select: select,
+		match: match
+	};
+	smsCode.lookup(query, function(err, rows) {
+		if (err) {
+			var msg = err.msg || err;
+			console.error('check the mobile failed' + msg);
+			fn(err);
+		} else {
+			var resData = rows;
+			fn(null, resData);
+		}
+	});
+}
+
+
+function updateSmsCode(param, fn) {
+	var update = {
+		smsCode: param.smsCode,
+		updateTime: new Date()
+	};
+
+	var match = {
+		mobile: param.mobile
+	};
+
+	var query = {
+		update: update,
+		match: match
+	};
+	smsCode.update(query, function(err, rows) {
+		if (err) {
+			var msg = err.msg || err;
+			console.error('update the mobile  smsCode failed' + msg);
+			fn(err);
+		} else {
+			var resData = rows[0];
+			fn(null, resData);
+		}
+	});
+}
+
+function processRequest(param, fn) {
 	if (!validate(param)) {
 		var msg = 'invalid input data ';
 		console.error(moduleName + msg);
@@ -56,18 +125,47 @@ function processRequest(param,fn){
 		});
 	}
 
-
-
 	var mobile = param.mobile;
-	
 	var smsCode = dataHelper.createSMSCode();
-		console.log(mobile+'......'+smsCode);
+
+	console.log(mobile + '......' + smsCode);
+	param.smsCode = smsCode;
+
+	debug(' user smsCode request ' + moduleName);
+
+	async.waterfall({
+		function(next) {
+			checkExitMobile(param, function(err, rows) {
+				next(err, rows);
+			});
+		},
+		function(result, next) {
+			if (result.length) {
+				updateSmsCode(param, function(err, rows) {
+					next(err, rows);
+				});
+			} else {
+				var id = dataHelper.createSmsCodeId();
+				param.id = id;
+				saveSmsCode(param, function(err, rows) {
+					next(err, rows);
+				});
+			}
+		}
+	}, function(err, result) {
+		if (err) {
+			var msg = err.msg || err;
+			console.error(' smsCode operation failed ' + msg);
+			fn(err);
+		} else {
+			var resData = {};
+			fn(null, resData);
+		}
+
+	});
 
 
-
-
-	fn(null,{smsCode:smsCode});
-/*
+	/*
 	var alidayu = new AliDaYu('23432071','d3602a7f07993e5dea031b142393774a');
 	alidayu.smsSend({
 		sms_free_sign_name:"票小秘",

@@ -57,7 +57,7 @@ function checkUserMobile(param, fn) {
 		select: select,
 		match: match
 	};
-	userModel.lookup(query, function(err, rows){
+	userModel.lookup(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
 			console.error('check user mobile failed' + msg);
@@ -156,7 +156,7 @@ function packageResponseData(data) {
 }
 
 function processRequest(param, fn) {
- 	//console.log(param);
+	//console.log(param);
 	if (!validate(param)) {
 		var msg = 'invalid input data ';
 		console.error(moduleName + msg);
@@ -165,9 +165,9 @@ function processRequest(param, fn) {
 			msg: msg
 		});
 	}
-	
-	
- 
+
+
+
 	//console.log(param);
 
 	var mobile = param.mobile;
@@ -203,22 +203,23 @@ function processRequest(param, fn) {
 						next(null, rows);
 					}
 				});
-			}]
-	},function(err, results){
-		if(err){
+			}
+		]
+	}, function(err, results) {
+		if (err) {
 			fn(err);
-		}else{
-             		var data = results.func2;
+		} else {
+			var data = results.func2;
 			var resData = packageResponseData(data);
 			fn(null, resData);
-	 	}
+		}
 	});
 }
 
 
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
-console.log(param);
+	console.log(param);
 	logicHelper.responseHttp({
 		req: req,
 		res: res,

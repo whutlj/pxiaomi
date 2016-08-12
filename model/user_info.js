@@ -10,22 +10,22 @@ var DBModel = require('./DBModel');
 
 // reference model
 var refModel = {
-    id : 'id',
-    name : 'name',
-    password : 'password',
-    portrait : 'portrait',
-    age : 20,
-    gender : 0, //0-male ,1 -female
-    type : 0, //0-user 1-admin
-    email :'pxiaomi@dmtec.cn',
-    mobile :'13419503630',
-    start : '',//the comment
-    smscode : 'smscode',
-    loginTime : new Date(),
-    loginState : 0,//0-login 1-logout
-    createTime : new Date(),
-    updateTime : new Date(),
-    state : 0 //0-valid 1-iivalid 2-deleted
+    id: 'id',
+    name: 'name',
+    password: 'password',
+    portrait: 'portrait',
+    age: 20,
+    gender: 0, //0-male ,1 -female
+    type: 0, //0-user 1-admin
+    email: 'pxiaomi@dmtec.cn',
+    mobile: '13419503630',
+    start: '', //the comment
+    smscode: 'smscode',
+    loginTime: new Date(),
+    loginState: 0, //0-login 1-logout
+    createTime: new Date(),
+    updateTime: new Date(),
+    state: 0 //0-valid 1-iivalid 2-deleted
 };
 
 var dbModel = new DBModel({
@@ -61,11 +61,11 @@ function remove(query, fn) {
 
 
 //count record
-function count(query, fn){
+function count(query, fn) {
     dbModel.count(query, fn);
 }
 
-function query(sqlStr, fn){
+function query(sqlStr, fn) {
     dbModel.query(sqlStr, fn);
 }
 
@@ -73,7 +73,7 @@ module.exports.create = create;
 module.exports.lookup = lookup;
 module.exports.update = update;
 module.exports.remove = remove;
-module.exports.count  = count;
-module.exports.query  = query;
+module.exports.count = count;
+module.exports.query = query;
 module.exports.dataModel = refModel;
 module.exports.tableName = table_name;

@@ -1,27 +1,25 @@
 'use strict';
 
+var moduleName = 'password_setNewPassworld.logic';
+var URLPATH = '/v1/password/inputNewPass';
 
-var moduleName = 'user_logout.logic';
-var URLPATH = '/v1/user/logout';
-
-var async = require('async');
 var express = require('express');
 var router = express.Router();
 var debug = require('debug')(moduleName);
-// var is = require('is_js');
+var async = require('async');
 
-
-var userModel = require('../../model/user_info');
-
+var logicHelper = require('../../common/logic_helper');
 var errorCode = require('../../common/errorCode');
 var dataHelper = require('../../common/dataHelper');
-var logicHelper = require('../../common/logic_helper');
-
-
+var userModel = require('../../model/user_info');
 
 var refModel = {
-	userId: {
+	mobile: {
 		data: 'mobile',
+		rangeCheck: null
+	},
+	smsCode: {
+		data: 'smsCode',
 		rangeCheck: null
 	}
 };
@@ -39,86 +37,70 @@ function validate(data) {
 }
 
 
-function logoutUser(param, fn) {
+
+function setNewPassword(param, fn) {
 	var update = {
-		loginState: 0,
+		password: param.password,
 		updateTime: new Date()
 	};
 	var match = {
-		id: param.userId
+		mobile: param.mobile
 	};
-
 	var query = {
 		update: update,
 		match: match
 	};
+
+	debug(' update the user password ' + moduleName);
+
 	userModel.update(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
-			console.error(' logout update state failed ' + msg);
+			console.error(' set new password failed ' + param.mobile);
 			fn(err);
 		} else {
-			fn(null, rows);
+			var resData = {};
+			fn(null, resData);
 		}
 	});
 }
 
 
-function packageResponseData(data) {
-	var resData = {};
-	return resData;
-
-}
-
-function processRequest(param, fn) {
+function processRequset(param, fn) {
 	if (!validate(param)) {
-		var msg = ' invalid input data ';
-		console.error(moduleName + ':' + msg);
+		var msg = 'invalid input data ';
+		console.error(moduleName + msg);
 		fn({
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
 	}
 
-	debug('try to update user loginState ' + param.userId);
+	debug(' try the set the new password for forget password user ' + param.mobile);
 
-	logoutUser(param, function(err, rows) {
+	setNewPassword(param, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
-			console.error('failed to update uer state ' + msg);
+			console.error(' set new password process failed ' + param.mobile);
 			fn(err);
 		} else {
-			var resData = packageResponseData(rows);
+			var resData = {};
 			fn(null, resData);
 		}
 	});
 }
 
+
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
 	logicHelper.responseHttp({
-		res: res,
 		req: req,
-		next: next,
-		moduleName: moduleName,
-		processRequest: processRequest,
-		debug: debug,
+		res: res,
 		param: param,
-	});
-});
-
-
-router.get(URLPATH, function(req, res, next) {
-	var param = req.query;
-	console.log(param);
-	logicHelper.responseHttp({
-		res: res,
-		req: req,
 		next: next,
 		moduleName: moduleName,
-		processRequest: processRequest,
 		debug: debug,
-		param: param
+		processRequest: processRequest
 	});
 });
 

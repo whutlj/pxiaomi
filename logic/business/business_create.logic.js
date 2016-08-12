@@ -57,8 +57,8 @@ var refModel = {
 		rangeCheck: null
 	},
 	postcode: {
-		data :'postcode',
-		rangeCheck :null
+		data: 'postcode',
+		rangeCheck: null
 	},
 	logitude: {
 		data: 'logitude',
@@ -108,7 +108,7 @@ function createBusiness(param, fn) {
 		values: values
 	};
 
-	
+
 	businessModel.create(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
@@ -122,7 +122,7 @@ function createBusiness(param, fn) {
 
 
 function packageResponseData(data) {
-	if(!data){
+	if (!data) {
 		return {};
 	}
 
@@ -134,7 +134,7 @@ function packageResponseData(data) {
 }
 
 function processRequest(param, fn) {
-	
+
 	if (!validate(param)) {
 		var msg = 'invalid input data';
 		console.error(moduleName + ' : ' + msg);
@@ -143,7 +143,7 @@ function processRequest(param, fn) {
 			msg: msg
 		});
 	}
-console.log(param);
+	console.log(param);
 	var businessId = dataHelper.createBusinessId(param);
 	param.id = businessId;
 
@@ -165,7 +165,7 @@ console.log(param);
 router.post(URLPATH, function(req, res, next) {
 
 	var param = req.body;
-//console.log(param);
+	//console.log(param);
 	logicHelper.responseHttp({
 		res: res,
 		req: req,

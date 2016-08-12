@@ -3,7 +3,7 @@
 /*
  * history:
  * 2016.07.08, created by Andy.zhou
- *  
+ *
  */
 'use strict';
 var express = require('express');
@@ -19,8 +19,7 @@ var socketPort = 8989;
 var constantHelper = require('./common/constants');
 var dataHelper = require('./common/dataHelper');
 
-var server =require('./socket/socket_server').server;
-
+var server = require('./socket/socket_server').server;
 
 
 
@@ -57,7 +56,6 @@ app.use(session({
 }));
 
 */
-
 
 
 
@@ -172,16 +170,16 @@ app.use(express.static(__dirname + '/uploads'));
 // Mount front API //////////////////////////////////////////////
 
 // SPA portal
-app.use(function(req, res){
-  debug('req.url'+req.originalUrl);
-	console.log('req.session:%j', req.session);
+app.use(function(req, res) {
+  debug('req.url' + req.originalUrl);
+  console.log('req.session:%j', req.session);
 
-	res.set('Content-Type', 'text/html');
-	res.send('pxiaomi service, no view');
+  res.set('Content-Type', 'text/html');
+  res.send('pxiaomi service, no view');
 });
 
 server.listen(socketPort);
 app.listen(port);
 
-console.log('dmtec pxiaomi socket server listening on '+socketPort);
-console.log('dmtec pxiaomi http server listening on '+port);
+console.log('dmtec pxiaomi socket server listening on ' + socketPort);
+console.log('dmtec pxiaomi http server listening on ' + port);

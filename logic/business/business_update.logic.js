@@ -17,7 +17,7 @@ var errorCode = require('../../common/errorCode');
 var businessModel = require('../../model/business_info');
 
 var refModel = {
-	businessId:{
+	businessId: {
 		data: 'businessId',
 		rangeCheck: null
 	},
@@ -33,9 +33,9 @@ var refModel = {
 		data: 'telephone',
 		rangeCheck: null
 	},
- 	email:{
+	email: {
 		data: 'email',
-		rangeCheck:null
+		rangeCheck: null
 	},
 	type: {
 		data: 'type',
@@ -61,8 +61,8 @@ var refModel = {
 		data: 'address',
 		rangeCheck: null
 	},
-	postcode:{
-		data:'postcode',
+	postcode: {
+		data: 'postcode',
 		rangeCheck: null
 	},
 	logitude: {
@@ -108,7 +108,7 @@ function updateBusiness(param, fn) {
 		updateTime: new Date()
 	};
 
-	var match ={
+	var match = {
 		id: param.id,
 		state: 0
 	};
