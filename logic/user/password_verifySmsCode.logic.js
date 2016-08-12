@@ -3,7 +3,7 @@
 var moduleName = 'password_verifySmsCode.logic';
 var URLPATH = '/v1/password/verify';
 
-var TIMEOUT = 10 * 60 * 1000;
+var TIMEOUT = 5 * 60 * 1000;
 
 
 var express = require('express');

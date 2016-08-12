@@ -116,16 +116,23 @@ function updateSmsCode(param, fn) {
 }
 
 function sendMessage(param,fn){
+	var mobile = param.mobile;
+	var smsCode = param.smsCode;
 	var alidayu = new AliDaYu('23432071','d3602a7f07993e5dea031b142393774a');
-	alidayu.smsSend({
+		alidayu.smsSend({
+		sms_type:"normal",
 		sms_free_sign_name:"票小秘",
-		rec_num: mobile,
-		sms_template_code:"SMS_13016870",
-		sms_param:{smsCode:smsCode}
+		rec_num:mobile,	
+		sms_param:{
+			smsCode:smsCode
+		},	
+		sms_template_code:"SMS_13016870"
+		
 	},function(err,result){
 		if(err){
 			var msg = ' SMSCode send failed ' + err;
-			console.log(msg);
+			console.log(err);
+			console.error(msg);
 			fn({code: errorCode.SMSCODE_SEND_FAILED,msg:msg});
 		}else{
 			var resData ={};
@@ -148,7 +155,6 @@ function processRequest(param, fn) {
 	var mobile = param.mobile;
 	var smsCode = dataHelper.createSMSCode();
 
-	console.log(mobile + '......' + smsCode);
 	param.smsCode = smsCode;
 
 	debug(' user smsCode request ' + moduleName);
@@ -157,6 +163,10 @@ function processRequest(param, fn) {
 		function(next) {
 			checkExitMobile(param, function(err, rows) {
 				next(err, rows);
+			});
+		},function(result,next){
+			sendMessage(param,function(err,rows){
+				next(err,result);
 			});
 		},
 		function(result, next) {
@@ -189,10 +199,8 @@ function processRequest(param, fn) {
 }
 
 
-
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
-       console.log(param);
 	logicHelper.responseHttp({
 		req: req,
 		res: res,
