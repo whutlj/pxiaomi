@@ -6,11 +6,10 @@ var URLPATH = '/v1/user/smsCode/request';
 var debug = require('debug')(moduleName);
 var express = require('express');
 var router = express.Router();
-var AliDaYu = require('alidayu-node');
 var async = require('async');
 
 //alidayu
-TopClient = require('../../alidayu/topClient').TopClient;
+var TopClient = require('../../alidayu/topClient').TopClient;
 
 var errorCode = require('../../common/errorCode');
 var dataHelper = require('../../common/dataHelper');
@@ -138,14 +137,11 @@ client.execute('alibaba.aliqin.fc.sms.num.send',
               },
               function (err,result) {
                   if(err){
-                  	console.log(err);
-                  	console.log(err.msg);
                   	var msg = ' send message error';
                   	console.error(msg + ' : '+err.msg);
                   	fn({code: errorCode.SMSCODE_SEND_FAILED,msg:msg});
                   }
                   else{
-                    console.log(result);
                     var resData = {};
                     fn(null,resData);
                 }
@@ -199,9 +195,7 @@ function processRequest(param, fn) {
 			console.error(' smsCode operation failed ' + msg);
 			fn(err);
 		} else {
-			var resData = {
-				smsCode: smsCode
-			};
+			var resData = {};
 			fn(null, resData);
 		}
 

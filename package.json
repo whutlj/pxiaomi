@@ -43,6 +43,7 @@
     "serve-static": "1.7.1",
     "server-static": "1.7.1",
     "should": "4.4.2",
+    "urllib": "^2.13.0",
     "wechat": "2.0.3"
   },
   "devDependencies": {
