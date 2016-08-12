@@ -49,7 +49,7 @@ function saveSmsCode(param, fn) {
 
 	debug(' try to save the smsCode ' + param.mobile);
 
-	smsCode.create(query, function(err, rows) {
+	smsCodeModel.create(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
 			console.error('save the smsCode failed' + msg);
@@ -76,7 +76,7 @@ function checkExitMobile(param, fn) {
 		select: select,
 		match: match
 	};
-	smsCode.lookup(query, function(err, rows) {
+	smsCodeModel.lookup(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
 			console.error('check the mobile failed' + msg);
@@ -103,7 +103,7 @@ function updateSmsCode(param, fn) {
 		update: update,
 		match: match
 	};
-	smsCode.update(query, function(err, rows) {
+	smsCodeModel.update(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
 			console.error('update the mobile  smsCode failed' + msg);
@@ -115,9 +115,11 @@ function updateSmsCode(param, fn) {
 	});
 }
 
+
+
 function processRequest(param, fn) {
 	if (!validate(param)) {
-		var msg = 'invalid input data ';
+		var msg = ' invalid input data ';
 		console.error(moduleName + msg);
 		fn({
 			code: errorCode.PARAM_INVALID,
@@ -133,7 +135,7 @@ function processRequest(param, fn) {
 
 	debug(' user smsCode request ' + moduleName);
 
-	async.waterfall({
+	async.waterfall([
 		function(next) {
 			checkExitMobile(param, function(err, rows) {
 				next(err, rows);
@@ -145,20 +147,22 @@ function processRequest(param, fn) {
 					next(err, rows);
 				});
 			} else {
-				var id = dataHelper.createSmsCodeId();
+				var id = dataHelper.createSmsCodeId(param);
 				param.id = id;
 				saveSmsCode(param, function(err, rows) {
 					next(err, rows);
 				});
 			}
 		}
-	}, function(err, result) {
+	], function(err, result) {
 		if (err) {
 			var msg = err.msg || err;
 			console.error(' smsCode operation failed ' + msg);
 			fn(err);
 		} else {
-			var resData = {};
+			var resData = {
+				smsCode: smsCode
+			};
 			fn(null, resData);
 		}
 
@@ -190,6 +194,7 @@ function processRequest(param, fn) {
 
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
+       console.log(param);
 	logicHelper.responseHttp({
 		req: req,
 		res: res,

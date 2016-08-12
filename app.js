@@ -23,12 +23,12 @@ var server = require('./socket/socket_server').server;
 
 
 
-/*
+
 /// body parser
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded());//for parsing application/x-www-form-urlencoded
-
+/*
 /// cookie
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());

@@ -25,7 +25,8 @@ var errorCode = {
 	BILLING_TIMEOUT: 2,
 	SMSCODE_SEND_FAILED: 1,
 	SMSCODE_USER_REGISTERED: 2,
-	SMSCODE_ERROR: 3
+	SMSCODE_ERROR: 3,
+	SMSCODE_TIMEOUT:4
 };
 
 module.exports = errorCode;

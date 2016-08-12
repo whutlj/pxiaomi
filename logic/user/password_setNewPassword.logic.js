@@ -18,8 +18,8 @@ var refModel = {
 		data: 'mobile',
 		rangeCheck: null
 	},
-	smsCode: {
-		data: 'smsCode',
+	password: {
+		data: 'password',
 		rangeCheck: null
 	}
 };
@@ -66,7 +66,7 @@ function setNewPassword(param, fn) {
 }
 
 
-function processRequset(param, fn) {
+function processRequest(param, fn) {
 	if (!validate(param)) {
 		var msg = 'invalid input data ';
 		console.error(moduleName + msg);

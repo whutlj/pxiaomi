@@ -45,7 +45,7 @@ function validate(data) {
 function checkUserExist(param, fn) {
 	var select = {
 		id: 'id',
-		mobile: mobile
+		mobile: 'mobile'
 	};
 	var match = {
 		mobile: param.mobile,
@@ -98,7 +98,7 @@ function querySmsCodeInfo(param, fn) {
 
 	debug(' query relevant smsCode info ' + param.mobile);
 
-	smsCode.lookup(query, function(err, rows) {
+	smsCodeModel.lookup(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
 			console.error('query the smsCode info  failed' + msg);
@@ -113,8 +113,15 @@ function querySmsCodeInfo(param, fn) {
 function checkTimeout(param, fn) {
 	var date = new Date();
 	var updateTime = param.updateTime;
-	console.log(typeof updateTime);
-	fn(null, {});
+	var limit = date - updateTime;
+	if(limit>TIMEOUT){
+		var msg = 'the smsCode timeout ';
+		console.error(msg);
+		fn({code:errorCode.SMSCODE_TIMEOUT,msg:msg});
+	}else{
+		var resData ={};
+		fn(null, resData);
+	}	
 }
 
 function checkSmsCode(param, fn) {
@@ -133,8 +140,9 @@ function checkSmsCode(param, fn) {
 	}
 }
 
-function processRequest(req, fn) {
-	if (!validate(param)) {
+function processRequest(param, fn) {
+	
+    if (!validate(param)) {
 		var msg = 'invalid input data ';
 		console.error(moduleName + msg);
 		fn({
@@ -145,7 +153,7 @@ function processRequest(req, fn) {
 
 	debug(' try to verify the user input smsCode ' + param.mobile);
 
-	async.waterfall({
+	async.waterfall([
 		function(next) {
 			checkUserExist(param, function(err, rows) {
 				next(err, rows);
@@ -171,7 +179,7 @@ function processRequest(req, fn) {
 				next(err, rows);
 			});
 		}
-	}, function(err, result) {
+	], function(err, result) {
 		if (err) {
 			var msg = err.msg || err;
 			console.error(' user register  failed ' + msg);
