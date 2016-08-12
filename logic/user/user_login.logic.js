@@ -122,7 +122,8 @@ function updateUserState(userId, fn) {
 	//console.log(id);
 	var query = {
 		update: {
-			loginState: 1
+			loginState: 1,
+			loginTime: new Date()
 		},
 		match: {
 			id: id

@@ -115,6 +115,24 @@ function updateSmsCode(param, fn) {
 	});
 }
 
+function sendMessage(param,fn){
+	var alidayu = new AliDaYu('23432071','d3602a7f07993e5dea031b142393774a');
+	alidayu.smsSend({
+		sms_free_sign_name:"票小秘",
+		rec_num: mobile,
+		sms_template_code:"SMS_13016870",
+		sms_param:{smsCode:smsCode}
+	},function(err,result){
+		if(err){
+			var msg = ' SMSCode send failed ' + err;
+			console.log(msg);
+			fn({code: errorCode.SMSCODE_SEND_FAILED,msg:msg});
+		}else{
+			var resData ={};
+			fn(null,resData);
+		}
+	} );
+}
 
 
 function processRequest(param, fn) {
@@ -168,26 +186,6 @@ function processRequest(param, fn) {
 
 	});
 
-
-	/*
-	var alidayu = new AliDaYu('23432071','d3602a7f07993e5dea031b142393774a');
-	alidayu.smsSend({
-		sms_free_sign_name:"票小秘",
-		rec_num: mobile,
-		sms_template_code:"SMS_13016870",
-		sms_param:{smsCode:smsCode}
-	},function(err,result){
-		if(err){
-			var msg = ' SMSCode send failed ' + err;
-			console.log(msg);
-			fn({code: errorCode.SMSCODE_SEND_FAILED,msg:msg});
-		}else{
-			var resData ={};
-			fn(null,resData);
-		}
-	} );
-
-*/
 }
 
 
