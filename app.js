@@ -21,10 +21,15 @@ var dataHelper = require('./common/dataHelper');
 
 var server =require('./socket/socket_server').server;
 
-server.listen(socketPort);
+
 
 
 /*
+/// body parser
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded());//for parsing application/x-www-form-urlencoded
+
 /// cookie
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
@@ -36,24 +41,24 @@ var sqlOptions = {
     host: 'localhost',
     port: 3306,
     user     : 'pxiaomi',
-    password : 'pxiaomipxiaomi',
-    database: 'pxiaomi',
+    password : 'pxiaomi@dmtec.cn',
+    database: 'pxiaomi'
 };
+
 var sessionStore = new MySQLStore(sqlOptions);
 
 app.use(session({
-  unset:'destroy',
+  unset:'keep',
   key: 'pxiaomi_session_cookie',
   secret: 'shuao.?pxiaomi@123',
   store: sessionStore,
-  cookie: {path:'/', secure:false, httpOnly:false, maxAge: 24*3600*1000,},
-  
+  cookie: {path:'/v1/user/smsCode/request', secure:false, httpOnly:true, maxAge:10000},
+  resave:true
 }));
+
 */
-/// body parser
-var bodyParser = require('body-parser');
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded());//for parsing application/x-www-form-urlencoded
+
+
 
 
 /*
@@ -175,6 +180,7 @@ app.use(function(req, res){
 	res.send('pxiaomi service, no view');
 });
 
+server.listen(socketPort);
 app.listen(port);
 
 console.log('dmtec pxiaomi socket server listening on '+socketPort);

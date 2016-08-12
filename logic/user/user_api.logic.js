@@ -16,7 +16,7 @@ var api_user_updatePas = require('./user_updatePas.logic');
 var api_user_logout = require('./user_logout.logic');
 var api_user_portrait = require('./user_upload_portrait.logic');
 var api_request_smsCode = require('./user_requestSMSCode.logic');
-
+var api_verify_smsCode = require('./user_verifySMSCode.logic');
 
 router.use(api_user_create.router);
 router.use(api_user_login.router);
@@ -26,6 +26,6 @@ router.use(api_user_updatePas.router);
 router.use(api_user_logout.router);
 router.use(api_user_portrait.router);
 router.use(api_request_smsCode.router);
-
+router.use(api_verify_smsCode.router);
 
 module.exports.router = router;

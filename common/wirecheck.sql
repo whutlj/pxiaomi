@@ -174,6 +174,20 @@ CREATE TABLE `tb_bill_items_info`(
 
 SHOW WARNINGS;
 
+DROP TABLE IF EXISTS `tb_smsCode_info`;
+CREATE TABLE `tb_smsCode_info`(
+  `id` VARCHAR(45) NOT NULL COMMENT 'smsCodeID',
+  `mobile` VARCHAR(22) DEFAULT NULL COMMENT 'mobile',
+  `smsCode` VARCHAR(22) DEFAULT NULL COMMENT 'smsCode',
+  `createTime` DATETIME NOT NULL DEFAULT now() COMMENT '创建日期',
+  `updateTime` DATETIME NOT NULL DEFAULT now() COMMENT 'update日期', 
+  `state` int(11) NOT NULL DEFAULT 0 COMMENT '记录状态 0:有效 1:非法 2:删除',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT 'smsCode';
+
+SHOW WARNINGS;
+
+
 GRANT ALL privileges ON pxiaomi.* TO pxiaomi@localhost IDENTIFIED BY 'pxiaomi@dmtec.cn';
 SHOW WARNINGS;
 

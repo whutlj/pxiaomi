@@ -12,8 +12,7 @@ var AliDaYu = require('alidayu-node');
 var errorCode = require('../../common/errorCode');
 var dataHelper = require('../../common/dataHelper');
 var logicHelper = require('../../common/logic_helper');
-
-
+var smsCodeModel = require('../../model/smsCode_info');
 
 
 var refModel = {
@@ -36,10 +35,18 @@ function validate(data) {
 	});
 }
 
+function saveSmsCode(param,fn){
+	var fields = {
+		id: param.id,
+		mobile: param.mobile,
+		smsCode: param.smsCode
+	};
+	var values = {}
+
+}
 
 
-
-function processRequset(param,fn){
+function processRequest(param,fn){
 	if (!validate(param)) {
 		var msg = 'invalid input data ';
 		console.error(moduleName + msg);
@@ -49,10 +56,19 @@ function processRequset(param,fn){
 		});
 	}
 
-	var mobile = param.mobile;
-	var alidayu = new AliDaYu('23432071','d3602a7f07993e5dea031b142393774a');
-	var smsCode = dataHelper.createSMSCode();
 
+
+	var mobile = param.mobile;
+	
+	var smsCode = dataHelper.createSMSCode();
+		console.log(mobile+'......'+smsCode);
+
+
+
+
+	fn(null,{smsCode:smsCode});
+/*
+	var alidayu = new AliDaYu('23432071','d3602a7f07993e5dea031b142393774a');
 	alidayu.smsSend({
 		sms_free_sign_name:"票小秘",
 		rec_num: mobile,
@@ -61,32 +77,21 @@ function processRequset(param,fn){
 	},function(err,result){
 		if(err){
 			var msg = ' SMSCode send failed ' + err;
-			console.lopg(msg);
+			console.log(msg);
 			fn({code: errorCode.SMSCODE_SEND_FAILED,msg:msg});
 		}else{
 			var resData ={};
 			fn(null,resData);
 		}
 	} );
+
+*/
 }
 
 
 
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
-	logicHelper.responseHttp({
-		req: req,
-		res: res,
-		param: param,
-		next: next,
-		moduleName: moduleName,
-		debug: debug,
-		processRequest: processRequest
-	});
-});
-
-router.get(URLPATH, function(req, res, next) {
-	var param = req.query;
 	logicHelper.responseHttp({
 		req: req,
 		res: res,
