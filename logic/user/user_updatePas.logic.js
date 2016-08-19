@@ -84,10 +84,10 @@ function validatePas(data, fn) {
 		});
 	} else {
 		if (oldPassword === newPassword) {
-			var msg = 'updatePas the old ane the new password same';
+			var msg = 'updatePas the old and the new password same';
 			console.error(msg);
 			fn({
-				code: errorCode.OLD_PASSWORD_ERROR,
+				code: errorCode.UPDATE_OLD_NEW_SAME,
 				msg: msg
 			});
 		} else {

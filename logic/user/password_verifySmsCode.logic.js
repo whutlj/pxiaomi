@@ -3,7 +3,7 @@
 var moduleName = 'password_verifySmsCode.logic';
 var URLPATH = '/v1/password/verify';
 
-var TIMEOUT = 5 * 60 * 1000;
+var TIMEOUT = 24 * 60 * 60 * 1000;
 
 
 var express = require('express');
@@ -24,7 +24,13 @@ var refModel = {
 	},
 	smsCode: {
 		data: 'smsCode',
-		rangeCheck: null
+		rangeCheck: function(data){
+		if(data){				
+			return true;
+		}else{
+			return false;		
+		}
+		}
 	}
 };
 
@@ -144,6 +150,7 @@ function processRequest(param,fn){
 		});
 	}
 	
+console.log(param);
 	debug(' try to verify the user input smsCode ' + param.mobile);
 
 	async.waterfall([

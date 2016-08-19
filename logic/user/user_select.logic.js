@@ -157,6 +157,7 @@ function processRequest(param, fn) {
 				fn(err);
 			} else {
 				var resData = packageResponseData(result[1]);
+console.log(resData);
 				fn(null, resData);
 			}
 		});

@@ -27,10 +27,6 @@ var refModel = {
 		data: 'userName',
 		rangeCheck: null
 	},
-	portrait: {
-		data: 'portrait',
-		rangeCheck: null
-	},
 	age: {
 		data: 0,
 		rangeCheck: null
@@ -67,7 +63,6 @@ function updateUserInfo(param, fn) {
 	//console.log(param);
 	var update = {
 		name: param.userName,
-		portrait: param.portrait,
 		age: param.age,
 		gender: param.gender,
 		email: param.email,

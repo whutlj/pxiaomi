@@ -129,24 +129,37 @@ function saveBill(param, fn) {
 
 
 function packageResponseData(data) {
+	console.log(data);
 	if (!data) {
 		var resData = {};
 	}
+	var contentNo = data.content;
+	switch(contentNo){
+		case 0:var content = "餐饮";
+		break;
+		case 1: var content = "住宿";
+		break;
+		default: var content = "其他";
+		break;
+	}
+	
 	var resData = {
 		billId: data.id,
 		type: data.type,
 		title: data.title,
 		taxNo: data.taxNo,
-		bankDeposite: data.bankDeposit,
+		bankDeposit: data.bankDeposit,
 		accountNo: data.accountNo,
-		addres: data.addres,
+		address: data.address,
 		mobile: data.mobile,
 		businessName: data.businessName,
 		amount: data.amount,
-		content: data.content,
+		content: content,
 		rate: data.rate
 	};
+	
 	return resData;
+
 }
 
 
@@ -158,6 +171,7 @@ function sendData(param, fn) {
 		var str = JSON.stringify(resData);
 		var buf = new Buffer(str, 'utf8');
 		var billId = param.id;
+		if(socket){
 		socket.write(buf);
 		socket.on('data', function(data) {
 
@@ -194,22 +208,19 @@ function sendData(param, fn) {
 				}
 			}
 		});
+		}else{
+			var msg = 'the pc not connected';
+			fn({code:errorCode.PC_NOT_CONNECTED,msg:msg});
+		}
 
 	} catch (e) {
-		var billId = param.id;
-		deleteFailBill(billId, function(err, rows) {
-			if (err) {
-				var msg = err.msg || err;
-				console.error(' detele invaild bill fail ' + msg);
-				fn(err);
-			} else {
+		
 				var msg = e.toString();
 				fn({
 					code: errorCode.SOCKET_CONNECTION_ERROR,
 					msg: msg
 				});
-			}
-		});
+		
 
 	}
 

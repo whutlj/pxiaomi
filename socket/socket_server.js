@@ -7,18 +7,11 @@ var SocketClient = require('./client_sockets');
 var socketUtil = require('./socketUtil');
 
 var server = net.createServer(function(socket) {
-	var buffers = [];
+	socket.setEncoding('utf8');
 	socket.on('data', function(data) {
-		buffers.push(data);
-	});
-	socket.on('close', function(err) {
-		socketUtil.spliceSocket(socket);
-	});
-
-	socket.on('end',function(){
-			var buffer = buffers.concat(buffers);
+		
 			try {
-			var json = JSON.parse(buffer);
+			var json = JSON.parse(data);
 			console.log(json);
 			var operation = json.operation;
 			if (operation == 0) {
@@ -29,16 +22,26 @@ var server = net.createServer(function(socket) {
 				};
 				var socketClient = new SocketClient(clientSocket);
 				socketUtil.pushSocket(socketClient);
-				socket.write('connect success!');
 			}
 		} catch (e) {
 			socket.write(e.toString());
 		}
 	});
+	socket.on('close', function(err) {
+		socketUtil.spliceSocket(socket);
+	});
+
+	socket.on('end',function(){
+		console.log('client end');	
+	});
+
+	socket.on('error',function(){
+		console.log('client error');	
+	});
 
 
 }).on('error', function(err) {
-	console.error(err.toString());
+	console.log(err.toString());
 }).on('close', function() {
 	console.log('server close');
 });
