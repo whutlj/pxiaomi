@@ -327,6 +327,7 @@ function processRequest(param, fn) {
 
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
+	console.log(param);
 	logicHelper.responseHttp({
 		res: res,
 		req: req,
