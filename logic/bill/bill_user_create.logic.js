@@ -20,6 +20,9 @@ var businessModel = require('../../model/business_info');
 
 var socketUtil = require('../../socket/socketUtil');
 
+
+var JPush = require('../../jpush/lib/JPUSH.js');
+
 var refModel = {
 	userId: {
 		data: 'userId',
@@ -128,21 +131,25 @@ function saveBill(param, fn) {
 }
 
 
+
 function packageResponseData(data) {
 	console.log(data);
 	if (!data) {
 		var resData = {};
 	}
 	var contentNo = data.content;
-	switch(contentNo){
-		case 0:var content = "餐饮";
-		break;
-		case 1: var content = "住宿";
-		break;
-		default: var content = "其他";
-		break;
+	switch (contentNo) {
+		case 0:
+			var content = "餐饮";
+			break;
+		case 1:
+			var content = "住宿";
+			break;
+		default:
+			var content = "其他";
+			break;
 	}
-	
+
 	var resData = {
 		billId: data.id,
 		type: data.type,
@@ -157,9 +164,25 @@ function packageResponseData(data) {
 		content: content,
 		rate: data.rate
 	};
-	
+
 	return resData;
 
+}
+
+function jpushMessage(param, fn) {
+	var client = JPush.buildClient('c8d110dee77d4d84494023fc', 'a3e81832fe85008f08f4668a', 5);
+	client.push().setPlatform('android', 'ios')
+		.setAudience(JPush.All)
+		.setNotification(JPush.ios('开票成功'), JPush.android('开票成功', '票小秘', 1))
+		.setOptions(null, 60)
+		.send(function(err, res) {
+			if (err) {
+				console.log(err.message);
+			} else {
+				console.log('Sendno: ' + res.sendno);
+				console.log('Msg_id: ' + res.msg_id);
+			}
+		});
 }
 
 
@@ -171,56 +194,60 @@ function sendData(param, fn) {
 		var str = JSON.stringify(resData);
 		var buf = new Buffer(str, 'utf8');
 		var billId = param.id;
-		if(socket){
-		socket.write(buf);
-		socket.on('data', function(data) {
+		if (socket) {
+			socket.write(buf);
+			socket.on('data', function(data) {
 
-			var json = JSON.parse(data);
-			var operation = json.operation;
-			var billId = json.billId;
-			console.log(json);
-			if (operation == 1) {
-				var status = json.status;
-				if (status != 0) {
-					deleteFailBill(billId, function(err, rows) {
-						if (err) {
-							var msg = err.msg || err;
-							console.error(' detele invaild bill fail ' + msg);
-							fn(err);
-						} else {
-							fn({
-								code: errorCode.BILLING_FAILED,
-								msg: ' billing failed'
-							});
-						}
-					});
-				} else {
-					validBill(billId, function(err, rows) {
-						if (err) {
-							var msg = err.msg || err;
-							console.error(' valid the bill fail ' + msg);
-							fn(err);
-						} else {
-							var resData = {};
-							fn(null, resData);
-						}
-					});
+				var json = JSON.parse(data);
+				var operation = json.operation;
+				var billId = json.billId;
+				console.log(json);
+				if (operation == 1) {
+					var status = json.status;
+					if (status != 0) {
+						deleteFailBill(billId, function(err, rows) {
+							if (err) {
+								var msg = err.msg || err;
+								console.error(' detele invaild bill fail ' + msg);
+								fn(err);
+							} else {
+								fn({
+									code: errorCode.BILLING_FAILED,
+									msg: ' billing failed'
+								});
+							}
+						});
+					} else {
+						validBill(billId, function(err, rows) {
+							if (err) {
+								var msg = err.msg || err;
+								console.error(' valid the bill fail ' + msg);
+								fn(err);
+							} else {
+								var resData = {};
+
+								fn(null, resData);
+							}
+						});
+					}
 				}
-			}
-		});
-		}else{
+			});
+		} else {
 			var msg = 'the pc not connected';
-			fn({code:errorCode.PC_NOT_CONNECTED,msg:msg});
+			fn({
+				code: errorCode.PC_NOT_CONNECTED,
+				msg: msg
+			});
 		}
 
 	} catch (e) {
-		
-				var msg = e.toString();
-				fn({
-					code: errorCode.SOCKET_CONNECTION_ERROR,
-					msg: msg
-				});
-		
+
+		var msg = e.toString();
+		fn({
+			code: errorCode.SOCKET_CONNECTION_ERROR,
+			msg: msg
+		});
+
 
 	}
 
@@ -279,6 +306,8 @@ function deleteFailBill(data, fn) {
 }
 
 
+
+
 // just a test
 function processRequest(param, fn) {
 	if (!validate(param)) {
@@ -313,6 +342,9 @@ function processRequest(param, fn) {
 		},
 		function(next) {
 			sendData(param, next);
+		},
+		function(next){
+			jpushMessage(param,next);
 		}
 	], function(err, result) {
 		if (err) {
