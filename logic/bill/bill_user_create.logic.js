@@ -21,7 +21,7 @@ var businessModel = require('../../model/business_info');
 var socketUtil = require('../../socket/socketUtil');
 
 
-var JPush = require('../../jpush/lib/JPUSH.js');
+var JPush = require('../../jpush/lib/JPush/JPush.js');
 
 var refModel = {
 	userId: {
@@ -81,6 +81,17 @@ var refModel = {
 	rate: {
 		data: 0.17,
 		rangeCheck: null
+	},
+	RegistrationID:{
+		data:'RegistrationID',
+		rangeCheck: function(data){
+			if(!data){
+			return false;		
+		}else{
+			return true;
+		}
+				
+		}
 	}
 };
 
@@ -132,126 +143,7 @@ function saveBill(param, fn) {
 
 
 
-function packageResponseData(data) {
-	console.log(data);
-	if (!data) {
-		var resData = {};
-	}
-	var contentNo = data.content;
-	switch (contentNo) {
-		case 0:
-			var content = "餐饮";
-			break;
-		case 1:
-			var content = "住宿";
-			break;
-		default:
-			var content = "其他";
-			break;
-	}
 
-	var resData = {
-		billId: data.id,
-		type: data.type,
-		title: data.title,
-		taxNo: data.taxNo,
-		bankDeposit: data.bankDeposit,
-		accountNo: data.accountNo,
-		address: data.address,
-		mobile: data.mobile,
-		businessName: data.businessName,
-		amount: data.amount,
-		content: content,
-		rate: data.rate
-	};
-
-	return resData;
-
-}
-
-function jpushMessage(param, fn) {
-	var client = JPush.buildClient('c8d110dee77d4d84494023fc', 'a3e81832fe85008f08f4668a', 5);
-	client.push().setPlatform('android', 'ios')
-		.setAudience(JPush.All)
-		.setNotification(JPush.ios('开票成功'), JPush.android('开票成功', '票小秘', 1))
-		.setOptions(null, 60)
-		.send(function(err, res) {
-			if (err) {
-				console.log(err.message);
-			} else {
-				console.log('Sendno: ' + res.sendno);
-				console.log('Msg_id: ' + res.msg_id);
-			}
-		});
-}
-
-
-function sendData(param, fn) {
-
-	try {
-		var socket = socketUtil.findSocket(param);
-		var resData = packageResponseData(param);
-		var str = JSON.stringify(resData);
-		var buf = new Buffer(str, 'utf8');
-		var billId = param.id;
-		if (socket) {
-			socket.write(buf);
-			socket.on('data', function(data) {
-
-				var json = JSON.parse(data);
-				var operation = json.operation;
-				var billId = json.billId;
-				console.log(json);
-				if (operation == 1) {
-					var status = json.status;
-					if (status != 0) {
-						deleteFailBill(billId, function(err, rows) {
-							if (err) {
-								var msg = err.msg || err;
-								console.error(' detele invaild bill fail ' + msg);
-								fn(err);
-							} else {
-								fn({
-									code: errorCode.BILLING_FAILED,
-									msg: ' billing failed'
-								});
-							}
-						});
-					} else {
-						validBill(billId, function(err, rows) {
-							if (err) {
-								var msg = err.msg || err;
-								console.error(' valid the bill fail ' + msg);
-								fn(err);
-							} else {
-								var resData = {};
-
-								fn(null, resData);
-							}
-						});
-					}
-				}
-			});
-		} else {
-			var msg = 'the pc not connected';
-			fn({
-				code: errorCode.PC_NOT_CONNECTED,
-				msg: msg
-			});
-		}
-
-	} catch (e) {
-
-		var msg = e.toString();
-		fn({
-			code: errorCode.SOCKET_CONNECTION_ERROR,
-			msg: msg
-		});
-
-
-	}
-
-}
 
 
 function validBill(data, fn) {
@@ -305,7 +197,153 @@ function deleteFailBill(data, fn) {
 	});
 }
 
+function sendData(param, fn) {
+	try {
+		var socket = socketUtil.findSocket(param);
+		var resData = packageResponseData(param);
+		var str = JSON.stringify(resData);
+		var buf = new Buffer(str, 'utf8');
+		var billId = param.id;
+		if (socket) {
+			socket.write(buf);
+			socket.on('data', function(data) {
+				var json = JSON.parse(data);
+				var operation = json.operation;
+				var billId = json.billId;
+				console.log(json);
+				if (operation == 1) {
+					var status = json.status;
+					if (status != 0) {
+						deleteFailBill(billId, function(err, rows) {
+							if (err) {
+								var msg = err.msg || err;
+								console.error(' detele invaild bill fail ' + msg);
+								fn(err);
+							} else {
+								fn({
+									code: errorCode.BILLING_FAILED,
+									msg: ' billing failed'
+								});
+							}
+						});
+					} else {
+						validBill(billId, function(err, rows) {
+							if (err) {
+								var msg = err.msg || err;
+								console.error(' valid the bill fail ' + msg);
+								fn(err);
+							} else {
+								var resData = {};
 
+								fn(null, resData);
+							}
+						});
+					}
+				}
+				if(operation == 2){
+					fn('fail');
+				}
+				
+			
+			});
+		} else {
+			var msg = 'the pc not connected';
+			fn({
+				code: errorCode.PC_NOT_CONNECTED,
+				msg: msg
+			});
+		}
+
+	} catch (e) {
+
+		var msg = e.toString();
+		fn({
+			code: errorCode.SOCKET_CONNECTION_ERROR,
+			msg: msg
+		});
+
+
+	}
+
+}
+
+function jpushSuccess(param) {
+	var client = JPush.buildClient('a7b009dc8b07f443492c2d1a', 'ff70d334f61a5be5c05abc90', 5);
+		var registration_id = param.RegistrationID;	
+		client.push().setPlatform('android', 'ios')
+		.setAudience(JPush.registration_id(registration_id))
+		.setNotification(JPush.ios('开票成功'), JPush.android('开票成功', '票小秘', 1))
+		.setOptions(null, 60)
+		.send(function(err, res) {
+			if (err) {
+				console.log(err.message);
+			} else {
+				console.log('Sendno: ' + res.sendno);
+				console.log('Msg_id: ' + res.msg_id);
+			}
+		});
+}
+
+
+function jpushFail(param) {
+	var client = JPush.buildClient('a7b009dc8b07f443492c2d1a', 'ff70d334f61a5be5c05abc90', 5);	
+	
+	var registration_id = param.RegistrationID;
+	var result = {
+			'status': param.code
+		};
+	client.push().setPlatform('android', 'ios')
+		.setAudience(JPush.registration_id(registration_id))
+		.setNotification(JPush.ios('开票失败'), JPush.android('开票失败', '票小秘', 1,result))
+		.setOptions(null, 60)
+		.send(function(err, res) {
+			if (err) {
+				console.log(err.message);
+			} else {
+				console.log('Sendno: ' + res.sendno);
+				console.log('Msg_id: ' + res.msg_id);
+			}
+		});
+}
+
+
+
+function packageResponseData(data) {
+	console.log(data);
+	if (!data) {
+		var resData = {};
+	}
+	var contentNo = data.content;
+	switch (contentNo) {
+		case 0:
+			var content = "住宿";
+			break;
+		case 1:
+			var content = "餐饮";
+			break;
+		default:
+			var content = "其他";
+			break;
+	}
+
+	var resData = {
+		billId: data.id,
+		type: data.type,
+		title: data.title,
+		taxNo: data.taxNo,
+		bankDeposit: data.bankDeposit,
+		accountNo: data.accountNo,
+		address: data.address,
+		mobile: data.mobile,
+		businessName: data.businessName,
+		amount: data.amount,
+		content: content,
+		rate: data.rate
+	};
+
+	return resData;
+
+}
 
 
 // just a test
@@ -317,42 +355,31 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+	}else{
+		var resData = {};
+		fn(null, resData);
 	}
 
 	var billId = dataHelper.createBillId();
 	param.id = billId;
-	/*
-	sendData(param);
-	//save bill
-	saveBill(param,function(err,rows){
 
-	if(err){
-			var msg = err.msg || err;
-			fn(err);
-		}else{
-			var resData = packageResponseData(param);
-			fn(null,resData);
-		}
-});
-*/
 	async.series([
-
 		function(next) {
 			saveBill(param, next);
 		},
 		function(next) {
 			sendData(param, next);
-		},
-		function(next){
-			jpushMessage(param,next);
 		}
 	], function(err, result) {
 		if (err) {
-			var msg = err.msg || err;
-			fn(err);
+			if(err.code){
+				param.code = err.code;	
+			}else{
+				param.code = 3;	
+			}
+			jpushFail(param);
 		} else {
-			var resData = {};
-			fn(null, resData);
+			jpushSuccess(param);
 		}
 	});
 }
