@@ -145,7 +145,7 @@ CREATE TABLE `tb_bill_info`(
   `businessId` VARCHAR(45) NOT NULL COMMENT '商户ID',
   `amount` VARCHAR(45) DEFAULT NULL COMMENT '发票金额',
   `type` int(11) DEFAULT 0 COMMENT '发票类型',
-  `content` VARCHAR(45) DEFAULT NULL COMMENT '发票内容',
+  `content` int(11) DEFAULT NULL COMMENT '发票内容',
   `createTime` DATETIME NOT NULL DEFAULT now() COMMENT '创建日期',
   `updateTime` DATETIME NOT NULL DEFAULT now() COMMENT 'update日期', 
   `state` int(11) NOT NULL DEFAULT 0 COMMENT '记录状态 0:有效 1:非法 2:删除',

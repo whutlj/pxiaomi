@@ -43,7 +43,7 @@ var refModel = {
 	},
 	mobile: {
 		data: '13419092394',
-		rangeCheck: logicHelper.validateMobile
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 

@@ -76,7 +76,9 @@ var refModel = {
 	},
 	content: {
 		data: 0,
-		rangeCheck: logicHelper.judgeNull
+		rangeCheck: function(data) {
+			return is.inArray(data, [0, 1,2]);
+		}
 	},
 	rate: {
 		data: 0.17,
