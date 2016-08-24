@@ -53,6 +53,16 @@ function validate(options) {
 	return true;
 }
 
+function judgeNull(data){
+	if(!data){
+		return false;		
+	}else{
+		return true;
+	}
+}
+
+
+
 function responseHttp(options) {
 	var res = options.res;
 	var req = options.req;

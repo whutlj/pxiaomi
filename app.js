@@ -58,7 +58,18 @@ app.use(session({
 */
 
 
-
+app.get('/apk/app-release.apk',function(req,res,next){
+var path = __dirname+'/apk/app-release.apk';
+var apk = fs.createReadStream(path);  
+var stat = fs.statSync(path);
+var size = stat.size;
+    res.writeHead(200, {
+      'Content-Type': 'application/force-download',
+      'Content-Disposition': 'attachment; filename=app-release.apk',
+      'Content-Length':size
+      }); 
+apk.pipe(res);
+});
 /*
 /// morgan log
 var morgan = require('morgan');
@@ -165,7 +176,6 @@ app.use(api_bill.router);
 //static path
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/uploads'));
-
 // front static server
 // Mount front API //////////////////////////////////////////////
 

@@ -102,9 +102,9 @@ function packageResponseData(data) {
 	}
 	var resData = {
 		simple: data[0],
-		simpleMoney: simpleMoney,
+		simMoney: simpleMoney,
 		complex: data[2],
-		complexMoney: complexMoney
+		comMoney: complexMoney
 	};
 
 	return resData;

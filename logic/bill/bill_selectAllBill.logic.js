@@ -36,12 +36,12 @@ function validate(data) {
 
 
 function queryBillInfo(param, fn) {
-	var userId = param.userId;
-	var sqlstr = 'select b.id billId,b.amount,b.content,b.rate,b.type,t.title,t.taxNo,t.bankDeposit,t.accountNo,t.address,t.mobile,bs.name businessName' +
+	var userId =(typeof param.userId) == 'string'? '"'+param.userId+'"':param.userId;
+	var sqlstr = 'select b.id billId,b.amount,b.content,b.rate,b.type,b.state,t.title,t.taxNo,t.bankDeposit,t.accountNo,t.address,t.mobile,bs.name businessName' +
 		' from tb_bill_info as b ' +
 		'inner join tb_tax_info as t on b.taxId=t.id ' +
 		'and b.userId = ' + userId +
-		'and b.state = 0' +
+		'and b.state IN (0,1)' +
 		' inner join tb_business_info as bs on  b.businessId=bs.id;';
 	param.sqlstr = sqlstr;
 	billModel.query(param, function(err, rows) {
@@ -78,6 +78,7 @@ function processRequest(param, fn) {
 			fn(err);
 		} else {
 			debug('Success to query all bill' + moduleName);
+	console.log(rows);
 			fn(null, rows);
 		}
 	});
@@ -88,6 +89,7 @@ function processRequest(param, fn) {
 //post interface
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
+
 	logicHelper.responseHttp({
 		res: res,
 		req: req,

@@ -128,8 +128,6 @@ function saveBill(param, fn) {
 		fields: values,
 		values: values
 	};
-
-	//console.log(query);
 	billModel.create(query, function(err, rows) {
 		if (err) {
 			var msg = err.msg || err;
@@ -174,7 +172,7 @@ function validBill(data, fn) {
 	});
 }
 
-
+/*
 function deleteFailBill(data, fn) {
 	var match = {
 		id: data
@@ -196,7 +194,7 @@ function deleteFailBill(data, fn) {
 
 	});
 }
-
+*/
 function sendData(param, fn) {
 	try {
 		var socket = socketUtil.findSocket(param);
@@ -211,9 +209,8 @@ function sendData(param, fn) {
 				var operation = json.operation;
 				var billId = json.billId;
 				console.log(json);
-				if (operation == 1) {
-					var status = json.status;
-					if (status != 0) {
+				if (operation == 1) {//billing success
+					/*
 						deleteFailBill(billId, function(err, rows) {
 							if (err) {
 								var msg = err.msg || err;
@@ -226,7 +223,7 @@ function sendData(param, fn) {
 								});
 							}
 						});
-					} else {
+					*/
 						validBill(billId, function(err, rows) {
 							if (err) {
 								var msg = err.msg || err;
@@ -238,13 +235,14 @@ function sendData(param, fn) {
 								fn(null, resData);
 							}
 						});
-					}
+					
 				}
 				if(operation == 2){
-					fn('fail');
+					fn({
+					code: errorCode.BILLING_FAILED,
+					msg: ' billing failed'
+								});
 				}
-				
-			
 			});
 		} else {
 			var msg = 'the pc not connected';
@@ -270,9 +268,12 @@ function sendData(param, fn) {
 function jpushSuccess(param) {
 	var client = JPush.buildClient('a7b009dc8b07f443492c2d1a', 'ff70d334f61a5be5c05abc90', 5);
 		var registration_id = param.RegistrationID;	
+		var result = {
+			'status' : 0
+		};
 		client.push().setPlatform('android', 'ios')
 		.setAudience(JPush.registration_id(registration_id))
-		.setNotification(JPush.ios('开票成功'), JPush.android('开票成功', '票小秘', 1))
+		.setNotification(JPush.ios('开票成功'), JPush.android('开票成功', '票小秘', 1,result))
 		.setOptions(null, 60)
 		.send(function(err, res) {
 			if (err) {
@@ -309,7 +310,6 @@ function jpushFail(param) {
 
 
 function packageResponseData(data) {
-	console.log(data);
 	if (!data) {
 		var resData = {};
 	}
@@ -386,7 +386,7 @@ function processRequest(param, fn) {
 
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
-	console.log(param);
+console.log(param);
 	logicHelper.responseHttp({
 		res: res,
 		req: req,
