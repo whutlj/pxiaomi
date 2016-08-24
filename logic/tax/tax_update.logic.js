@@ -44,7 +44,7 @@ var refModel = {
 	},
 	mobile: {
 		data: 'mobile',
-		rangeCheck: logicHelper.validateMobile
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 

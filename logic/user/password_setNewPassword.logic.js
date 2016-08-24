@@ -20,7 +20,7 @@ var refModel = {
 	},
 	password: {
 		data: 'password',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 

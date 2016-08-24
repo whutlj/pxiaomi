@@ -29,7 +29,7 @@ var refModel = {
 	},
 	age: {
 		data: 0,
-		rangeCheck: logicHelper.judgeNull
+		rangeCheck: null
 	},
 	gender: {
 		data: 0,
