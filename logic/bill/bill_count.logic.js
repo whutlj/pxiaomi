@@ -19,7 +19,7 @@ var billModel = require('../../model/bill_info');
 var refModel = {
 	userId: {
 		data: 'userId',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 
@@ -119,6 +119,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 
 	debug(' try to count the user bill info' + moduleName);

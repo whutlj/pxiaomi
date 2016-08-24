@@ -23,15 +23,15 @@ var dataHelper = require('../../common/dataHelper');
 var refModel = {
 	mobile: {
 		data: '',
-		rangeCheck: null
+		rangeCheck: logic_helper.validateMobile
 	},
 	userName: {
 		data: '',
-		rangeCheck: null
+		rangeCheck: logic_helper.judgeNull
 	},
 	password: {
 		data: '',
-		rangeCheck: null
+		rangeCheck: logic_helper.judgeNull
 	},
 	gender: {
 		data: 2, //default unknown
@@ -161,6 +161,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 	var userName = param.userName || param.name;
 	var userId = dataHelper.createUserId(param);

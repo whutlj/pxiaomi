@@ -21,11 +21,11 @@ var logicHelper = require('../../common/logic_helper');
 var refModel = {
 	mobile: {
 		data: 'mobile',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	password: {
 		data: 'password',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 
@@ -165,6 +165,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 
 

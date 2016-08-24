@@ -20,7 +20,7 @@ var userModel = require('../../model/user_info');
 var refModel = {
 	userId: {
 		data: '',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 
@@ -137,6 +137,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 
 	debug('try to select user info :' + param.id);

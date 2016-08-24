@@ -26,19 +26,19 @@ var JPush = require('../../jpush/lib/JPush/JPush.js');
 var refModel = {
 	userId: {
 		data: 'userId',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	taxId: {
 		data: 'taxId',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	businessId: {
 		data: 'businessId',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	amount: {
 		data: 'amount',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	type: {
 		data: 0,
@@ -48,39 +48,39 @@ var refModel = {
 	},
 	title: {
 		data: 'title',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	taxNo: {
 		data: 'taxNo',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	bankDeposit: {
 		data: 'bankDeposit',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	accountNo: {
 		data: 'accountNo',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	address: {
 		data: 'address',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	mobile: {
 		data: 'mobile',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	businessName: {
 		data: 'businessName',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	content: {
 		data: 0,
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	rate: {
 		data: 0.17,
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	RegistrationID:{
 		data:'RegistrationID',
@@ -355,6 +355,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}else{
 		var resData = {};
 		fn(null, resData);

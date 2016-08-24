@@ -18,55 +18,55 @@ var businessModel = require('../../model/business_info');
 var refModel = {
 	name: {
 		data: 'name',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	mobile: {
 		data: 'mobile',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	telephone: {
 		data: 'telephone',
-		rangeCheck: null
+		rangeCheck: logicHelper.validateMobiless
 	},
 	email: {
 		data: 'email',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	type: {
 		data: 'type',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	provice: {
 		data: 'provice',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	city: {
 		data: 'city',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	district: {
 		data: 'district',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	town: {
 		data: 'town',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	address: {
 		data: 'address',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	postcode: {
 		data: 'postcode',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	logitude: {
 		data: 'logitude',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	latitude: {
 		data: 'latitude',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 
@@ -142,6 +142,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 	console.log(param);
 	var businessId = dataHelper.createBusinessId(param);

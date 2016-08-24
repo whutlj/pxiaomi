@@ -21,7 +21,7 @@ var businessModel = require('../../model/business_info');
 var refModel = {
 	nameInfo: {
 		data: 'nameInfo',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 
@@ -82,6 +82,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 
 	debug(' try to select all appropriate business ');

@@ -3,7 +3,7 @@
 var moduleName = 'user_verifySMSCode.logic';
 var URLPATH = '/v1/user/smsCode/verify';
 
-var TIMEOUT = 24*60 * 60 * 1000;
+var TIMEOUT = 24 *60 * 60 * 1000;
 
 
 var express = require('express');
@@ -20,11 +20,11 @@ var smsCodeModel = require('../../model/smsCode_info');
 var refModel = {
 	mobile: {
 		data: 'mobile',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	smsCode: {
 		data: 'smsCode',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 
@@ -149,6 +149,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 
 	debug(' try to verify the user input smsCode ' + param.mobile);

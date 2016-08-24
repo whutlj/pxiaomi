@@ -20,7 +20,7 @@ var smsCodeModel = require('../../model/smsCode_info');
 var refModel = {
 	mobile: {
 		data: 'mobile',
-		rangeCheck: null 
+		rangeCheck: logicHelper.judgeNull 
 	},
 	smsCode: {
 		data: 'smsCode',
@@ -148,6 +148,7 @@ function processRequest(param,fn){
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 	
 console.log(param);

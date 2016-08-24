@@ -19,7 +19,7 @@ var businessModel = require('../../model/business_info');
 var refModel = {
 	businessId: {
 		data: 'businessId',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 
@@ -77,6 +77,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 
 	var businessId = param.businessId;

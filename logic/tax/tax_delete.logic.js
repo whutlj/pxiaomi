@@ -19,7 +19,7 @@ var taxModel = require('../../model/tax_info');
 var refModel = {
 	taxId: {
 		data: 'taxId',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 
@@ -77,6 +77,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 
 	var taxId = param.taxId;

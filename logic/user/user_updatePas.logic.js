@@ -19,15 +19,15 @@ var userModel = require('../../model/user_info');
 var refModel = {
 	userId: {
 		data: 'userId',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	password: {
 		data: 'password',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	newPassword: {
 		data: 'newPassword',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 
@@ -141,6 +141,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 
 

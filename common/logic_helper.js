@@ -53,6 +53,12 @@ function validate(options) {
 	return true;
 }
 
+
+function validateMobile(data){
+	var regExp = /^1[3|4|5|7|8]\d{9}$/;
+		return regExp.test(data); 
+}
+
 function judgeNull(data){
 	if(!data){
 		return false;		
@@ -175,7 +181,7 @@ function parseEditData(options) {
 
 module.exports.judgeNull = judgeNull;
 module.exports.responseHttp = responseHttp;
-//module.exports.createData = createData;
+module.exports.validateMobile = validateMobile;
 module.exports.validate = validate;
 
 module.exports.parseEditData = parseEditData;

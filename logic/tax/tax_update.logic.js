@@ -20,31 +20,31 @@ var taxModel = require('../../model/tax_info');
 var refModel = {
 	taxId: {
 		data: 'taxId',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	title: {
 		data: 'title',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	taxNo: {
 		data: 'taxNo',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	bankDeposit: {
 		data: 'bankDeposit',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	accountNo: {
 		data: 'accountNo',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	address: {
 		data: 'address',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	mobile: {
 		data: 'mobile',
-		rangeCheck: null
+		rangeCheck: logicHelper.validateMobile
 	}
 };
 
@@ -98,6 +98,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 
 	var taxId = param.taxId;

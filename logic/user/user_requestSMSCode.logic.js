@@ -20,7 +20,7 @@ var smsCodeModel = require('../../model/smsCode_info');
 var refModel = {
 	mobile: {
 		data: 'mobile',
-		rangeCheck: null
+		rangeCheck: logicHelper.validateMobile
 	}
 };
 
@@ -138,7 +138,7 @@ client.execute('alibaba.aliqin.fc.sms.num.send',
               function (err,result) {
                   if(err){
                   	var msg = ' send message error';
-                  	console.error(msg + ' : '+err.msg);
+                  	console.error(msg + ' : '+err);
                   	fn({code: errorCode.SMSCODE_SEND_FAILED,msg:msg});
                   }
                   else{
@@ -157,6 +157,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 
 	var mobile = param.mobile;
@@ -206,6 +207,7 @@ function processRequest(param, fn) {
 
 router.post(URLPATH, function(req, res, next) {
 	var param = req.body;
+	console.log(param);
 	logicHelper.responseHttp({
 		req: req,
 		res: res,

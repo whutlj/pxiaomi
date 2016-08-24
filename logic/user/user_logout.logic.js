@@ -22,7 +22,7 @@ var logicHelper = require('../../common/logic_helper');
 var refModel = {
 	userId: {
 		data: 'mobile',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	}
 };
 
@@ -78,6 +78,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+		return;
 	}
 
 	debug('try to update user loginState ' + param.userId);
