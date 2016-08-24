@@ -173,8 +173,9 @@ function parseEditData(options) {
 	return data;
 }
 
-module.exports.validate = validate;
+module.exports.judgeNull = judgeNull;
 module.exports.responseHttp = responseHttp;
 //module.exports.createData = createData;
+module.exports.validate = validate;
 
 module.exports.parseEditData = parseEditData;

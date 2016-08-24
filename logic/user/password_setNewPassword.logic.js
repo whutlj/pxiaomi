@@ -16,7 +16,7 @@ var userModel = require('../../model/user_info');
 var refModel = {
 	mobile: {
 		data: 'mobile',
-		rangeCheck: null
+		rangeCheck: logicHelper.judgeNull
 	},
 	password: {
 		data: 'password',
