@@ -74,6 +74,7 @@ function processRequest(param, fn) {
 			code: errorCode.PARAM_INVALID,
 			msg: msg
 		});
+return;
 	}
 
 	debug(' try the set the new password for forget password user ' + param.mobile);
